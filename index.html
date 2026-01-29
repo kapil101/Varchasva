@@ -403,7 +403,7 @@
                     <div class="batch-card">
                         <div class="batch-card-header">
                             <span class="batch-label">🔥 NEXT BATCH</span>
-                            <div class="batch-date">February 15, 2025</div>
+                            <div class="batch-date" data-config="batchStartDate">February 15, 2025</div>
                         </div>
                         <div class="countdown-container">
                             <div class="countdown-label">Enrollment closes in:</div>
@@ -415,9 +415,9 @@
                             </div>
                         </div>
                         <div class="batch-info">
-                            <div class="batch-info-item"><span class="batch-info-label">Duration</span><span class="batch-info-value">65 Days (13 Weeks)</span></div>
-                            <div class="batch-info-item"><span class="batch-info-label">Timings</span><span class="batch-info-value">7:00 PM - 9:00 PM IST</span></div>
-                            <div class="batch-info-item"><span class="batch-info-label">Seats Available</span><span class="batch-info-value seats-indicator"><span class="seats-dot"></span>12 of 30 left</span></div>
+                            <div class="batch-info-item"><span class="batch-info-label">Duration</span><span class="batch-info-value" data-config="duration">65 Days (13 Weeks)</span></div>
+                            <div class="batch-info-item"><span class="batch-info-label">Timings</span><span class="batch-info-value" data-config="classTime">7:00 PM - 9:00 PM IST</span></div>
+                            <div class="batch-info-item"><span class="batch-info-label">Seats Available</span><span class="batch-info-value seats-indicator"><span class="seats-dot"></span><span data-config="seatsLeft">12 of 30 left</span></span></div>
                         </div>
                         <button type="button" class="batch-cta" onclick="document.getElementById('enrollModal').classList.add('active'); document.body.style.overflow='hidden';">Reserve Your Seat →</button>
                         <p class="batch-guarantee">✓ 7-Day Money-Back Guarantee</p>
@@ -469,10 +469,10 @@
                 <div class="schedule-card reveal">
                     <h3 class="schedule-card-title"><span class="schedule-card-icon">🕐</span>Class Timings</h3>
                     <ul class="schedule-list">
-                        <li><span class="schedule-list-label">Days</span><span class="schedule-list-value">Monday to Friday</span></li>
-                        <li><span class="schedule-list-label">Time</span><span class="schedule-list-value">7:00 PM - 9:00 PM IST</span></li>
-                        <li><span class="schedule-list-label">Duration</span><span class="schedule-list-value">2 Hours / Day</span></li>
-                        <li><span class="schedule-list-label">Total Sessions</span><span class="schedule-list-value">65 Live Classes</span></li>
+                        <li><span class="schedule-list-label">Days</span><span class="schedule-list-value" data-config="classDays">Monday to Friday</span></li>
+                        <li><span class="schedule-list-label">Time</span><span class="schedule-list-value" data-config="classTime">7:00 PM - 9:00 PM IST</span></li>
+                        <li><span class="schedule-list-label">Duration</span><span class="schedule-list-value" data-config="classDuration">2 Hours / Day</span></li>
+                        <li><span class="schedule-list-label">Total Sessions</span><span class="schedule-list-value" data-config="totalSessions">65 Live Classes</span></li>
                         <li><span class="schedule-list-label">Weekend</span><span class="schedule-list-value">Practice & Assignments</span></li>
                     </ul>
                     <div class="timezone-note">⏰ All timings in IST. Recordings available if you miss a class.</div>
@@ -480,10 +480,10 @@
                 <div class="schedule-card reveal">
                     <h3 class="schedule-card-title"><span class="schedule-card-icon">📋</span>Batch Details</h3>
                     <ul class="schedule-list">
-                        <li><span class="schedule-list-label">Batch Start</span><span class="schedule-list-value">February 15, 2025</span></li>
-                        <li><span class="schedule-list-label">Batch End</span><span class="schedule-list-value">April 30, 2025</span></li>
-                        <li><span class="schedule-list-label">Total Duration</span><span class="schedule-list-value">13 Weeks</span></li>
-                        <li><span class="schedule-list-label">Batch Size</span><span class="schedule-list-value">30 Students (Max)</span></li>
+                        <li><span class="schedule-list-label">Batch Start</span><span class="schedule-list-value" data-config="batchStartDate">February 15, 2025</span></li>
+                        <li><span class="schedule-list-label">Batch End</span><span class="schedule-list-value" data-config="batchEndDate">April 30, 2025</span></li>
+                        <li><span class="schedule-list-label">Total Duration</span><span class="schedule-list-value" data-config="durationWeeks">13 Weeks</span></li>
+                        <li><span class="schedule-list-label">Batch Size</span><span class="schedule-list-value" data-config="totalSeats">30 Students (Max)</span></li>
                         <li><span class="schedule-list-label">Platform</span><span class="schedule-list-value">Zoom + Discord</span></li>
                     </ul>
                 </div>
@@ -648,14 +648,14 @@
                 <h2 class="cta-title">Ready to <span class="gradient-text">Transform</span> Your Career?</h2>
                 <p class="cta-subtitle">Join 500+ students who landed their dream jobs.</p>
                 <div class="cta-batch-info">
-                    <div class="cta-batch-item"><div class="cta-batch-label">Next Batch</div><div class="cta-batch-value">Feb 15, 2025</div></div>
-                    <div class="cta-batch-item"><div class="cta-batch-label">Duration</div><div class="cta-batch-value">65 Days</div></div>
-                    <div class="cta-batch-item"><div class="cta-batch-label">Seats Left</div><div class="cta-batch-value">12 of 30</div></div>
-                    <div class="cta-batch-item"><div class="cta-batch-label">Starts From</div><div class="cta-batch-value">₹4,999</div></div>
+                    <div class="cta-batch-item"><div class="cta-batch-label">Next Batch</div><div class="cta-batch-value" data-config="batchStartDateShort">Feb 15, 2025</div></div>
+                    <div class="cta-batch-item"><div class="cta-batch-label">Duration</div><div class="cta-batch-value" data-config="durationDays">65 Days</div></div>
+                    <div class="cta-batch-item"><div class="cta-batch-label">Seats Left</div><div class="cta-batch-value" data-config="seatsLeftShort">12 of 30</div></div>
+                    <div class="cta-batch-item"><div class="cta-batch-label">Starts From</div><div class="cta-batch-value" data-config="startingPrice">₹4,999</div></div>
                 </div>
                 <div class="cta-buttons">
                     <button type="button" class="btn-primary" onclick="document.getElementById('enrollModal').classList.add('active'); document.body.style.overflow='hidden';">🚀 Enroll Now</button>
-                    <a href="https://wa.me/919876543210?text=Hi!%20I%20have%20a%20question%20about%20C%20Mastery%20course." class="btn-secondary" target="_blank">💬 Talk to Us</a>
+                    <a href="#" data-config="whatsappLinkQuery" class="btn-secondary" target="_blank">💬 Talk to Us</a>
                 </div>
             </div>
         </div>
@@ -666,16 +666,16 @@
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-brand">
-                    <div class="footer-logo"><span class="footer-logo-icon">C</span><span>C Mastery</span></div>
+                    <div class="footer-logo"><span class="footer-logo-icon">C</span><span data-config="courseName">C Mastery</span></div>
                     <p class="footer-description">Transform from beginner to professional C developer in 65 days.</p>
-                    <p>📧 <a href="mailto:hello@cmastery.com">hello@cmastery.com</a><br>📱 <a href="https://wa.me/919876543210">+91 98765 43210</a></p>
+                    <p>📧 <a href="mailto:hello@cmastery.com" data-config="email">hello@cmastery.com</a><br>📱 <a href="#" data-config="whatsappLink"><span data-config="whatsappDisplay">+91 98765 43210</span></a></p>
                 </div>
                 <div class="footer-column"><h4>Course</h4><ul class="footer-links"><li><a href="#curriculum">Curriculum</a></li><li><a href="#schedule">Schedule</a></li><li><a href="#pricing">Pricing</a></li></ul></div>
                 <div class="footer-column"><h4>Resources</h4><ul class="footer-links"><li><a href="#">Free Cheatsheet</a></li><li><a href="#">Blog</a></li><li><a href="#">YouTube</a></li></ul></div>
                 <div class="footer-column"><h4>Support</h4><ul class="footer-links"><li><a href="#faq">FAQ</a></li><li><a href="#">Contact</a></li><li><a href="#">Refund Policy</a></li></ul></div>
             </div>
             <div class="footer-bottom">
-                <p class="footer-copyright">© 2025 C Mastery. All rights reserved.</p>
+                <p class="footer-copyright" data-config="copyright">© 2025 C Mastery. All rights reserved.</p>
                 <div class="footer-social"><a href="#">YT</a><a href="#">LI</a><a href="#">IG</a><a href="#">X</a></div>
             </div>
         </div>
@@ -803,7 +803,7 @@
 
                     <!-- Submit Button - WhatsApp Only -->
                     <div class="form-actions">
-                        <button type="submit" class="btn-whatsapp-main">
+                        <button type="button" id="enrollWhatsAppBtn" class="btn-whatsapp-main">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
                             Enroll via WhatsApp
                         </button>
@@ -822,9 +822,121 @@
     </div>
 
     <script>
+        // ============================================================
+        // SITE CONFIGURATION - Edit these values to customize the page
+        // ============================================================
+        const CONFIG = {
+            // Course Info
+            courseName: 'C Mastery',
+            courseSubject: 'C Programming',
+            courseDurationDays: 65,
+            courseDurationWeeks: 13,
+            totalSessions: 65,
+            
+            // Batch Details
+            batchStartDate: 'February 15, 2025',
+            batchStartDateShort: 'Feb 15, 2025',
+            batchEndDate: 'April 30, 2025',
+            enrollmentDeadline: '2025-02-10T23:59:59',
+            
+            // Class Timings
+            classTime: '7:00 PM - 9:00 PM IST',
+            classDays: 'Monday to Friday',
+            classDurationHours: 2,
+            
+            // Seats
+            totalSeats: 30,
+            seatsLeft: 12,
+            
+            // Contact Info
+            whatsappNumber: '919876543210',  // Format: country code + number (no +)
+            whatsappDisplay: '+91 98765 43210',
+            email: 'hello@cmastery.com',
+            
+            // Pricing (in INR)
+            pricing: {
+                standard: { price: 4999, original: 9999 },
+                pro: { price: 7999, original: 14999 }
+            },
+            
+            // Coupon Codes
+            coupons: {
+                'EARLY500': 500,
+                'CMASTER': 500,
+                'STUDENT10': 0.10,  // 10% - will be calculated
+                'FRIEND20': 0.20   // 20% - will be calculated
+            },
+            
+            // Social Links (leave empty string if not applicable)
+            social: {
+                youtube: '#',
+                linkedin: '#',
+                instagram: '#',
+                twitter: '#',
+                github: '#'
+            },
+            
+            // Copyright Year
+            copyrightYear: 2025
+        };
+        // ============================================================
+
+        // Helper function to get WhatsApp URL
+        function getWhatsAppURL(message = '') {
+            const encodedMsg = message ? `?text=${encodeURIComponent(message)}` : '';
+            return `https://wa.me/${CONFIG.whatsappNumber}${encodedMsg}`;
+        }
+
+        // Populate dynamic content from CONFIG
+        function populateFromConfig() {
+            // Batch dates
+            document.querySelectorAll('[data-config="batchStartDate"]').forEach(el => el.textContent = CONFIG.batchStartDate);
+            document.querySelectorAll('[data-config="batchStartDateShort"]').forEach(el => el.textContent = CONFIG.batchStartDateShort);
+            document.querySelectorAll('[data-config="batchEndDate"]').forEach(el => el.textContent = CONFIG.batchEndDate);
+            
+            // Duration & Sessions
+            document.querySelectorAll('[data-config="duration"]').forEach(el => el.textContent = `${CONFIG.courseDurationDays} Days (${CONFIG.courseDurationWeeks} Weeks)`);
+            document.querySelectorAll('[data-config="durationDays"]').forEach(el => el.textContent = `${CONFIG.courseDurationDays} Days`);
+            document.querySelectorAll('[data-config="durationWeeks"]').forEach(el => el.textContent = `${CONFIG.courseDurationWeeks} Weeks`);
+            
+            // Class Info
+            document.querySelectorAll('[data-config="classTime"]').forEach(el => el.textContent = CONFIG.classTime);
+            document.querySelectorAll('[data-config="classDays"]').forEach(el => el.textContent = CONFIG.classDays);
+            document.querySelectorAll('[data-config="classDuration"]').forEach(el => el.textContent = `${CONFIG.classDurationHours} Hours / Day`);
+            document.querySelectorAll('[data-config="totalSessions"]').forEach(el => el.textContent = `${CONFIG.totalSessions} Live Classes`);
+            
+            // Seats
+            document.querySelectorAll('[data-config="seatsLeft"]').forEach(el => el.textContent = `${CONFIG.seatsLeft} of ${CONFIG.totalSeats} left`);
+            document.querySelectorAll('[data-config="seatsLeftShort"]').forEach(el => el.textContent = `${CONFIG.seatsLeft} of ${CONFIG.totalSeats}`);
+            document.querySelectorAll('[data-config="totalSeats"]').forEach(el => el.textContent = `${CONFIG.totalSeats} Students (Max)`);
+            
+            // Contact
+            document.querySelectorAll('[data-config="email"]').forEach(el => {
+                el.textContent = CONFIG.email;
+                if (el.tagName === 'A') el.href = `mailto:${CONFIG.email}`;
+            });
+            document.querySelectorAll('[data-config="whatsappDisplay"]').forEach(el => el.textContent = CONFIG.whatsappDisplay);
+            document.querySelectorAll('a[data-config="whatsappLink"]').forEach(el => el.href = getWhatsAppURL());
+            document.querySelectorAll('a[data-config="whatsappLinkQuery"]').forEach(el => {
+                el.href = getWhatsAppURL(`Hi! I have a question about ${CONFIG.courseName} course.`);
+            });
+            
+            // Course Name
+            document.querySelectorAll('[data-config="courseName"]').forEach(el => el.textContent = CONFIG.courseName);
+            
+            // Pricing
+            document.querySelectorAll('[data-config="startingPrice"]').forEach(el => el.textContent = `₹${CONFIG.pricing.standard.price.toLocaleString('en-IN')}`);
+            
+            // Copyright
+            document.querySelectorAll('[data-config="copyright"]').forEach(el => el.textContent = `© ${CONFIG.copyrightYear} ${CONFIG.courseName}. All rights reserved.`);
+        }
+
+        // Run on DOM load
+        document.addEventListener('DOMContentLoaded', populateFromConfig);
+
         // Countdown Timer
         function updateCountdown() {
-            const deadline = new Date('2025-02-10T23:59:59').getTime();
+            const deadline = new Date(CONFIG.enrollmentDeadline).getTime();
             const now = new Date().getTime();
             const distance = deadline - now;
             if (distance > 0) {
@@ -877,11 +989,8 @@
         const modal = document.getElementById('enrollModal');
         const modalCloseBtn = document.getElementById('modalClose');
         
-        // Pricing data
-        const plans = {
-            standard: { price: 4999, original: 9999 },
-            pro: { price: 7999, original: 14999 }
-        };
+        // Pricing data (from CONFIG)
+        const plans = CONFIG.pricing;
         let selectedPlan = 'pro';
         let couponApplied = false;
         let couponDiscount = 0;
@@ -946,13 +1055,12 @@
         document.getElementById('applyCoupon').addEventListener('click', function() {
             const couponCode = document.getElementById('coupon').value.trim().toUpperCase();
             
-            // Sample coupon codes - customize as needed
-            const validCoupons = {
-                'EARLY500': 500,
-                'CMASTER': 500,
-                'STUDENT10': Math.round(plans[selectedPlan].price * 0.1),
-                'FRIEND20': Math.round(plans[selectedPlan].price * 0.2)
-            };
+            // Coupon codes from CONFIG
+            const validCoupons = {};
+            for (const [code, value] of Object.entries(CONFIG.coupons)) {
+                // If value < 1, treat as percentage
+                validCoupons[code] = value < 1 ? Math.round(plans[selectedPlan].price * value) : value;
+            }
 
             if (validCoupons[couponCode]) {
                 couponApplied = true;
@@ -974,9 +1082,8 @@
             this.value = this.value.replace(/\D/g, '').slice(0, 10);
         });
 
-        // Form submission - WhatsApp only
-        document.getElementById('enrollForm').addEventListener('submit', function(e) {
-            e.preventDefault();
+        // Form submission - WhatsApp only (direct click handler)
+        document.getElementById('enrollWhatsAppBtn').addEventListener('click', function(e) {
             
             // Validate required fields
             const name = document.getElementById('fullName').value.trim();
@@ -1016,12 +1123,11 @@
                 'other': 'Other'
             };
 
-            // ============ WHATSAPP NUMBER - UPDATE THIS ============
-            const whatsappNumber = '919876543210'; // ← REPLACE WITH YOUR NUMBER
-            // =======================================================
+            // WhatsApp number from CONFIG
+            const whatsappNumber = CONFIG.whatsappNumber;
             
             // Build WhatsApp message
-            let message = `Hi! I want to enroll in *C Mastery* 🚀\n\n`;
+            let message = `Hi! I want to enroll in *${CONFIG.courseName}* 🚀\n\n`;
             message += `*📋 My Details:*\n`;
             message += `━━━━━━━━━━━━━━━\n`;
             message += `👤 Name: ${name}\n`;
@@ -1042,9 +1148,15 @@
             message += `\n`;
             message += `Please share payment details. 🙏`;
 
-            // Open WhatsApp
+            // Open WhatsApp (with fallback)
             const whatsappURL = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
-            window.open(whatsappURL, '_blank');
+            
+            // Try window.open first, fallback to location.href
+            const newWindow = window.open(whatsappURL, '_blank');
+            if (!newWindow || newWindow.closed || typeof newWindow.closed === 'undefined') {
+                // Popup was blocked, use direct navigation
+                window.location.href = whatsappURL;
+            }
             
             // Close modal after small delay
             setTimeout(() => {
