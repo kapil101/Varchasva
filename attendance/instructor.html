@@ -1096,16 +1096,14 @@
             btn.innerHTML = '<span class="loading"></span> Logging in...';
 
             try {
-                const response = await fetch(CONFIG.API_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        action: 'adminLogin',
-                        username,
-                        password
-                    })
+                // Use GET with query params (CORS-friendly, like other endpoints)
+                const params = new URLSearchParams({
+                    action: 'adminLogin',
+                    username,
+                    password
                 });
 
+                const response = await fetch(`${CONFIG.API_URL}?${params.toString()}`);
                 const result = await response.json();
 
                 if (result.success) {
