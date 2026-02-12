@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard | C Mastery</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0e17;
+            --bg-secondary: #111827;
+            --bg-card: #151d2e;
+            --bg-input: #1e293b;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --accent-cyan: #06b6d4;
+            --accent-purple: #8b5cf6;
+            --accent-green: #10b981;
+            --accent-red: #ef4444;
+            --accent-orange: #f59e0b;
+            --border-subtle: rgba(148, 163, 184, 0.1);
+            --gradient-primary: linear-gradient(135deg, #06b6d4, #8b5cf6);
+            --gradient-success: linear-gradient(135deg, #10b981, #06b6d4);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-subtle);
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+            font-size: 1.25rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-primary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .student-badge {
+            padding: 8px 16px;
+            background: rgba(6, 182, 212, 0.15);
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: var(--accent-cyan);
+        }
+
+        .btn-change {
+            padding: 8px 16px;
+            background: transparent;
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+        }
+
+        .btn-change:hover {
+            border-color: var(--accent-cyan);
+            color: var(--text-primary);
+        }
+
+        /* Main Container */
+        .main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 32px 24px;
+        }
+
+        /* Welcome Section */
+        .welcome-section {
+            margin-bottom: 32px;
+        }
+
+        .welcome-title {
+            font-size: 1.75rem;
+            margin-bottom: 8px;
+        }
+
+        .welcome-subtitle {
+            color: var(--text-secondary);
+        }
+
+        /* Grid Layout */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        /* Card Styles */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 16px;
+            padding: 24px;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-icon {
+            font-size: 1.25rem;
+        }
+
+        .card.full-width {
+            grid-column: span 2;
+        }
+
+        /* Today's Class Card */
+        .today-card {
+            background: linear-gradient(135deg, rgba(6, 182, 212, 0.15), rgba(139, 92, 246, 0.15));
+            border-color: rgba(6, 182, 212, 0.3);
+        }
+
+        .today-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .today-info {
+            flex: 1;
+        }
+
+        .today-day-badge {
+            display: inline-block;
+            padding: 6px 14px;
+            background: var(--gradient-primary);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--bg-primary);
+            margin-bottom: 12px;
+        }
+
+        .today-topic {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .today-time {
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+        }
+
+        .today-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .status-dot.attended {
+            background: var(--accent-green);
+        }
+
+        .status-dot.pending {
+            background: var(--accent-orange);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        .btn-attendance {
+            padding: 14px 28px;
+            background: var(--gradient-primary);
+            border: none;
+            border-radius: 12px;
+            color: var(--bg-primary);
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .btn-attendance:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(6, 182, 212, 0.4);
+        }
+
+        .btn-attendance.disabled {
+            background: var(--bg-input);
+            color: var(--text-secondary);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Attendance Stats */
+        .stats-row {
+            display: flex;
+            align-items: baseline;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .stats-number {
+            font-size: 3rem;
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stats-label {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+        }
+
+        .stats-percent {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-green);
+        }
+
+        .progress-bar {
+            height: 12px;
+            background: var(--bg-input);
+            border-radius: 6px;
+            overflow: hidden;
+            margin-bottom: 12px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient-primary);
+            border-radius: 6px;
+            transition: width 0.5s ease;
+        }
+
+        .streak-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            background: rgba(245, 158, 11, 0.15);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: var(--accent-orange);
+        }
+
+        /* Calendar Grid */
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(13, 1fr);
+            gap: 8px;
+        }
+
+        .calendar-week-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-align: center;
+            padding: 8px 0;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.3s;
+            cursor: default;
+        }
+
+        .calendar-day.attended {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--accent-green);
+            border: 1px solid rgba(16, 185, 129, 0.4);
+        }
+
+        .calendar-day.missed {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--accent-red);
+            border: 1px solid rgba(239, 68, 68, 0.4);
+        }
+
+        .calendar-day.today {
+            background: rgba(6, 182, 212, 0.2);
+            color: var(--accent-cyan);
+            border: 2px solid var(--accent-cyan);
+        }
+
+        .calendar-day.upcoming {
+            background: var(--bg-input);
+            color: var(--text-muted);
+            border: 1px solid var(--border-subtle);
+        }
+
+        .calendar-legend {
+            display: flex;
+            gap: 20px;
+            margin-top: 16px;
+            font-size: 0.85rem;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-secondary);
+        }
+
+        .legend-dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 4px;
+        }
+
+        .legend-dot.attended { background: rgba(16, 185, 129, 0.3); border: 1px solid var(--accent-green); }
+        .legend-dot.missed { background: rgba(239, 68, 68, 0.3); border: 1px solid var(--accent-red); }
+        .legend-dot.today { background: rgba(6, 182, 212, 0.3); border: 2px solid var(--accent-cyan); }
+        .legend-dot.upcoming { background: var(--bg-input); border: 1px solid var(--border-subtle); }
+
+        /* Coming Soon Cards */
+        .coming-soon-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 200px;
+            text-align: center;
+        }
+
+        .coming-soon-icon {
+            font-size: 3rem;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        .coming-soon-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+        }
+
+        .coming-soon-text {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            max-width: 280px;
+        }
+
+        .coming-soon-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            background: var(--bg-input);
+            border-radius: 4px;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 12px;
+        }
+
+        /* Login Section */
+        .login-container {
+            max-width: 420px;
+            margin: 80px auto;
+        }
+
+        .login-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 20px;
+            padding: 40px 32px;
+            text-align: center;
+        }
+
+        .login-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--gradient-primary);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin: 0 auto 24px;
+        }
+
+        .login-title {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+        }
+
+        .login-subtitle {
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            background: var(--bg-input);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            font-family: inherit;
+            transition: all 0.3s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.1);
+        }
+
+        .form-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .remember-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 24px;
+            text-align: left;
+        }
+
+        .remember-checkbox {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--accent-cyan);
+            cursor: pointer;
+        }
+
+        .remember-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 16px;
+            background: var(--gradient-primary);
+            border: none;
+            border-radius: 12px;
+            color: var(--bg-primary);
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(6, 182, 212, 0.4);
+        }
+
+        .login-note {
+            margin-top: 20px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        /* Footer */
+        .footer {
+            padding: 24px;
+            text-align: center;
+            border-top: 1px solid var(--border-subtle);
+            margin-top: 40px;
+        }
+
+        .footer-text {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .footer-link {
+            color: var(--accent-cyan);
+            text-decoration: none;
+        }
+
+        /* Loading */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Hidden */
+        .hidden {
+            display: none !important;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            .card.full-width {
+                grid-column: span 1;
+            }
+            .calendar-grid {
+                grid-template-columns: repeat(7, 1fr);
+            }
+        }
+
+        @media (max-width: 640px) {
+            .header {
+                flex-direction: column;
+                gap: 16px;
+                text-align: center;
+            }
+            .today-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            .calendar-grid {
+                grid-template-columns: repeat(5, 1fr);
+            }
+            .calendar-legend {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Section (shown first) -->
+    <div id="loginSection">
+        <header class="header">
+            <div class="logo">
+                <div class="logo-icon">C</div>
+                <span>C Mastery</span>
+            </div>
+        </header>
+        <main class="main">
+            <div class="login-container">
+                <div class="login-card">
+                    <div class="login-icon">👋</div>
+                    <h1 class="login-title">Welcome back!</h1>
+                    <p class="login-subtitle">Enter your roll number to access your dashboard</p>
+                    
+                    <form id="loginForm">
+                        <div class="form-group">
+                            <label class="form-label">Roll Number</label>
+                            <input type="text" class="form-input" id="rollInput" placeholder="e.g., CS2024-001" required>
+                        </div>
+                        
+                        <div class="remember-group">
+                            <input type="checkbox" class="remember-checkbox" id="rememberRoll" checked>
+                            <label class="remember-label" for="rememberRoll">Remember me on this device</label>
+                        </div>
+                        
+                        <button type="submit" class="btn-login">
+                            🔓 Access Dashboard
+                        </button>
+                    </form>
+                    
+                    <p class="login-note">Use the roll number provided during enrollment</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Dashboard Section (shown after login) -->
+    <div id="dashboardSection" class="hidden">
+        <header class="header">
+            <div class="logo">
+                <div class="logo-icon">C</div>
+                <span>C Mastery</span>
+            </div>
+            <div class="header-right">
+                <div class="student-badge" id="studentBadge">Roll: CS2024-001</div>
+                <button class="btn-change" id="changeRollBtn">Change</button>
+            </div>
+        </header>
+
+        <main class="main">
+            <!-- Welcome Section -->
+            <div class="welcome-section">
+                <h1 class="welcome-title">👋 Welcome back!</h1>
+                <p class="welcome-subtitle" id="welcomeText">Ready for today's learning session?</p>
+            </div>
+
+            <!-- Dashboard Grid -->
+            <div class="dashboard-grid">
+                <!-- Today's Class Card -->
+                <div class="card today-card">
+                    <div class="card-header">
+                        <h2 class="card-title">
+                            <span class="card-icon">📅</span>
+                            Today's Class
+                        </h2>
+                    </div>
+                    <div class="today-content">
+                        <div class="today-info">
+                            <div class="today-day-badge" id="todayBadge">Day 1</div>
+                            <div class="today-topic" id="todayTopic">Introduction to C</div>
+                            <div class="today-time">7:00 PM - 9:00 PM IST</div>
+                            <div class="today-status" id="todayStatus">
+                                <span class="status-dot pending"></span>
+                                <span>Not marked yet</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Attendance Stats Card -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">
+                            <span class="card-icon">📊</span>
+                            Your Attendance
+                        </h2>
+                    </div>
+                    <div class="stats-row">
+                        <span class="stats-number" id="attendanceCount">0</span>
+                        <span class="stats-label">of <span id="totalDays">0</span> days</span>
+                        <span class="stats-percent" id="attendancePercent">(0%)</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                    </div>
+                    <div class="streak-badge" id="streakBadge">
+                        🔥 <span id="streakCount">0</span>-day streak
+                    </div>
+                </div>
+
+                <!-- Attendance Calendar -->
+                <div class="card full-width">
+                    <div class="card-header">
+                        <h2 class="card-title">
+                            <span class="card-icon">📅</span>
+                            Attendance Calendar
+                        </h2>
+                    </div>
+                    <div class="calendar-grid" id="calendarGrid">
+                        <!-- Calendar will be populated by JS -->
+                    </div>
+                    <div class="calendar-legend">
+                        <div class="legend-item">
+                            <div class="legend-dot attended"></div>
+                            <span>Attended</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-dot missed"></div>
+                            <span>Missed</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-dot today"></div>
+                            <span>Today</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-dot upcoming"></div>
+                            <span>Upcoming</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recordings Card (Coming Soon) -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">
+                            <span class="card-icon">🎥</span>
+                            Recordings
+                        </h2>
+                    </div>
+                    <div class="coming-soon-content">
+                        <div class="coming-soon-icon">🔒</div>
+                        <div class="coming-soon-title">Coming Soon</div>
+                        <div class="coming-soon-text">Class recordings will appear here once your instructor uploads them.</div>
+                        <div class="coming-soon-badge">Version 1.1</div>
+                    </div>
+                </div>
+
+                <!-- Slides Card (Coming Soon) -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">
+                            <span class="card-icon">📑</span>
+                            Slides & Materials
+                        </h2>
+                    </div>
+                    <div class="coming-soon-content">
+                        <div class="coming-soon-icon">🔒</div>
+                        <div class="coming-soon-title">Coming Soon</div>
+                        <div class="coming-soon-text">Download slides and course materials after each class.</div>
+                        <div class="coming-soon-badge">Version 1.1</div>
+                    </div>
+                </div>
+
+                <!-- Assignments Card (Coming Soon) -->
+                <div class="card full-width">
+                    <div class="card-header">
+                        <h2 class="card-title">
+                            <span class="card-icon">📝</span>
+                            Assignments
+                        </h2>
+                    </div>
+                    <div class="coming-soon-content">
+                        <div class="coming-soon-icon">🔒</div>
+                        <div class="coming-soon-title">Coming Soon</div>
+                        <div class="coming-soon-text">Submit assignments and track your progress. This feature is available for Pro plan students.</div>
+                        <div class="coming-soon-badge">Version 1.2</div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p class="footer-text">
+                Need help? Contact your instructor via <a href="#" class="footer-link">WhatsApp</a>
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        // ═══════════════════════════════════════════════════════════════
+        // CONFIGURATION
+        // ═══════════════════════════════════════════════════════════════
+        
+        const CONFIG = {
+            // Your deployed Google Apps Script Web App URL
+            API_URL: 'https://script.google.com/macros/s/AKfycbxIYkCytSFuVcs-OJ_yMzlh7PEIyUGjB1XVXZRKa5hDddfowqGrrpCEkpG3zYghJmhAmA/exec',
+            
+            // Total course days
+            TOTAL_DAYS: 65,
+            
+            // Course topics
+            TOPICS: [
+                "Introduction to C & Computer Fundamentals",
+                "Algorithmic Thinking & Problem Solving",
+                "What is Programming? Why C?",
+                "Hello World & Compilation Process",
+                "Input/Output & Basic Interaction",
+                "Data Types & Variables",
+                "Operators & Expressions",
+                "Relational & Logical Operators",
+                "Decision Making - if/else",
+                "switch-case & Practice",
+                "while Loop",
+                "for Loop",
+                "do-while & Nested Loops",
+                "Loop Mastery & Problem Solving",
+                "PROJECT 1: CLI Calculator",
+                "Introduction to Functions",
+                "Function Parameters & Return Values",
+                "Scope & Storage Classes",
+                "Recursion",
+                "Function Best Practices & Review",
+                "One-Dimensional Arrays",
+                "Array Algorithms - Part 1",
+                "Array Algorithms - Part 2",
+                "Two-Dimensional Arrays",
+                "Arrays & Functions",
+                "Strings as Character Arrays",
+                "String Library Functions",
+                "String Manipulation",
+                "Array of Strings",
+                "PROJECT 2: Text Analyzer (Intro)",
+                "Memory Addresses",
+                "Introduction to Pointers",
+                "Pointer Arithmetic",
+                "Pointers and Arrays",
+                "PROJECT 2: Text Analyzer (Implementation)",
+                "Pointers and Functions",
+                "Pointers and Strings",
+                "Dynamic Memory Allocation",
+                "Memory Management & Debugging",
+                "Pointers - Advanced Concepts",
+                "Structures - Basics",
+                "Array of Structures & Functions",
+                "File I/O - Basics",
+                "File I/O - Advanced",
+                "PROJECT 3: Contact Manager",
+                "Linked Lists - Concept & Node Creation",
+                "Linked Lists - Operations Part 1",
+                "Linked Lists - Operations Part 2",
+                "Stacks and Queues",
+                "Data Structures Review & Integration",
+                "Preprocessor & Macros",
+                "Multi-File Programs & Header Files",
+                "Command Line Arguments & Bit Manipulation",
+                "Debugging, Testing & Code Quality",
+                "Common Patterns & Best Practices",
+                "Final Project - Planning",
+                "Final Project - Day 1 Implementation",
+                "Final Project - Day 2 Implementation",
+                "Final Project - Day 3 Implementation",
+                "Final Project - Completion & Review",
+                "Performance & Optimization",
+                "Common Pitfalls & Debugging Strategies",
+                "C in the Real World",
+                "Interview Preparation - Technical",
+                "Next Steps & Course Conclusion"
+            ]
+        };
+
+        // ═══════════════════════════════════════════════════════════════
+        // STATE
+        // ═══════════════════════════════════════════════════════════════
+        
+        let state = {
+            rollNumber: null,
+            currentDay: 1,
+            attendance: {
+                total: 0,
+                percent: 0,
+                streak: 0,
+                attendedDays: [],
+                calendar: []
+            }
+        };
+
+        // Admin flag (controls whether "Change" button is visible)
+        let isAdmin = false;
+
+        // ═══════════════════════════════════════════════════════════════
+        // INITIALIZATION
+        // ═══════════════════════════════════════════════════════════════
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeFromURLOrStorage();
+            setupEventListeners();
+        });
+
+        function initializeFromURLOrStorage() {
+            const params = new URLSearchParams(window.location.search);
+            const urlRoll = (params.get('roll') || '').trim().toUpperCase();
+            const urlAdmin = (params.get('admin') || '').trim();
+
+            // Treat admin=1 as admin mode
+            isAdmin = (urlAdmin === '1');
+
+            if (urlRoll) {
+                // Preferred: roll passed via URL (e.g., from attendance success screen)
+                state.rollNumber = urlRoll;
+                // Also remember it locally for next visit
+                localStorage.setItem('cmastery_roll', urlRoll);
+                showDashboard();
+                loadStudentData();
+            } else {
+                // Fallback: previously saved roll in localStorage
+                const savedRoll = localStorage.getItem('cmastery_roll');
+                if (savedRoll) {
+                    state.rollNumber = savedRoll;
+                    showDashboard();
+                    loadStudentData();
+                }
+            }
+        }
+
+        function setupEventListeners() {
+            // Login form
+            document.getElementById('loginForm').addEventListener('submit', handleLogin);
+            
+            // Change roll button
+            document.getElementById('changeRollBtn').addEventListener('click', logout);
+            
+            // Auto-uppercase roll input
+            document.getElementById('rollInput').addEventListener('input', (e) => {
+                e.target.value = e.target.value.toUpperCase();
+            });
+        }
+
+        // ═══════════════════════════════════════════════════════════════
+        // LOGIN / LOGOUT
+        // ═══════════════════════════════════════════════════════════════
+        
+        function handleLogin(e) {
+            e.preventDefault();
+            const roll = document.getElementById('rollInput').value.trim().toUpperCase();
+            const remember = document.getElementById('rememberRoll').checked;
+
+            if (!roll) {
+                alert('Please enter your roll number');
+                return;
+            }
+
+            state.rollNumber = roll;
+            
+            if (remember) {
+                localStorage.setItem('cmastery_roll', roll);
+            }
+
+            // Keep URL in sync with current roll (and admin flag)
+            try {
+                const url = new URL(window.location.href);
+                url.searchParams.set('roll', roll);
+                if (isAdmin) {
+                    url.searchParams.set('admin', '1');
+                } else {
+                    url.searchParams.delete('admin');
+                }
+                window.history.replaceState({}, '', url.toString());
+            } catch (e) {
+                console.error('Error updating URL with roll:', e);
+            }
+
+            showDashboard();
+            loadStudentData();
+        }
+
+        function logout() {
+            state.rollNumber = null;
+            localStorage.removeItem('cmastery_roll');
+            document.getElementById('loginSection').classList.remove('hidden');
+            document.getElementById('dashboardSection').classList.add('hidden');
+            document.getElementById('rollInput').value = '';
+
+            // When logging out, clear roll from URL but keep admin flag
+            try {
+                const url = new URL(window.location.href);
+                url.searchParams.delete('roll');
+                if (isAdmin) {
+                    url.searchParams.set('admin', '1');
+                }
+                window.history.replaceState({}, '', url.toString());
+            } catch (e) {
+                console.error('Error updating URL on logout:', e);
+            }
+        }
+
+        function showDashboard() {
+            document.getElementById('loginSection').classList.add('hidden');
+            document.getElementById('dashboardSection').classList.remove('hidden');
+            document.getElementById('studentBadge').textContent = `Roll: ${state.rollNumber}`;
+
+            // Only show "Change" button in admin mode
+            const changeBtn = document.getElementById('changeRollBtn');
+            if (changeBtn) {
+                changeBtn.style.display = isAdmin ? 'inline-flex' : 'none';
+            }
+        }
+
+        // ═══════════════════════════════════════════════════════════════
+        // DATA LOADING
+        // ═══════════════════════════════════════════════════════════════
+        
+        async function loadStudentData() {
+            try {
+                // Fetch attendance calendar
+                const response = await fetch(
+                    `${CONFIG.API_URL}?action=getAttendanceCalendar&rollNumber=${state.rollNumber}`
+                );
+                const result = await response.json();
+
+                if (result.success) {
+                    state.attendance = {
+                        total: result.data.totalAttended,
+                        percent: result.data.percent,
+                        streak: result.data.streak,
+                        attendedDays: result.data.calendar.filter(d => d.attended).map(d => d.day),
+                        calendar: result.data.calendar
+                    };
+                    state.currentDay = result.data.currentDay;
+                    
+                    updateDashboard();
+                } else {
+                    // If backend says the student does not exist, force logout
+                    if (result.data?.status === 'StudentNotFound') {
+                        alert(result.message || 'No student record found for this roll number.');
+                        logout();
+                    } else {
+                        alert(result.message || 'Failed to load your attendance. Please contact your instructor.');
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading data:', error);
+                alert('Could not load your attendance right now. Please check your connection or contact your instructor.');
+            }
+        }
+
+        // ═══════════════════════════════════════════════════════════════
+        // DASHBOARD UPDATE
+        // ═══════════════════════════════════════════════════════════════
+        
+        function updateDashboard() {
+            // Today's class
+            const topic = CONFIG.TOPICS[state.currentDay - 1] || 'Unknown Topic';
+            document.getElementById('todayBadge').textContent = `Day ${state.currentDay}`;
+            document.getElementById('todayTopic').textContent = topic;
+
+            // Check if today's attendance is marked (read-only status)
+            const todayAttended = state.attendance.attendedDays.includes(state.currentDay);
+            const statusEl = document.getElementById('todayStatus');
+
+            if (todayAttended) {
+                statusEl.innerHTML = `<span class="status-dot attended"></span><span>Attendance marked ✓</span>`;
+            } else {
+                statusEl.innerHTML = `<span class="status-dot pending"></span><span>Not marked yet</span>`;
+            }
+
+            // Attendance stats
+            document.getElementById('attendanceCount').textContent = state.attendance.total;
+            document.getElementById('totalDays').textContent = state.currentDay;
+            document.getElementById('attendancePercent').textContent = `(${state.attendance.percent}%)`;
+            document.getElementById('progressFill').style.width = `${state.attendance.percent}%`;
+            document.getElementById('streakCount').textContent = state.attendance.streak;
+
+            // Show/hide streak badge based on streak
+            const streakBadge = document.getElementById('streakBadge');
+            if (state.attendance.streak >= 3) {
+                streakBadge.style.display = 'inline-flex';
+            } else {
+                streakBadge.style.display = 'none';
+            }
+
+            // Build calendar
+            buildCalendar();
+        }
+
+        function buildCalendar() {
+            const container = document.getElementById('calendarGrid');
+            container.innerHTML = '';
+
+            // Add week labels
+            for (let w = 1; w <= 13; w++) {
+                const label = document.createElement('div');
+                label.className = 'calendar-week-label';
+                label.textContent = `W${w}`;
+                container.appendChild(label);
+            }
+
+            // Add days (5 days per week × 13 weeks = 65 days)
+            for (let day = 1; day <= CONFIG.TOTAL_DAYS; day++) {
+                const calDay = state.attendance.calendar.find(c => c.day === day) || { day, status: 'upcoming' };
+                
+                const dayEl = document.createElement('div');
+                dayEl.className = `calendar-day ${calDay.status}`;
+                dayEl.textContent = day;
+                dayEl.title = `Day ${day}: ${CONFIG.TOPICS[day - 1]}`;
+                container.appendChild(dayEl);
+            }
+        }
+    </script>
+</body>
+</html>

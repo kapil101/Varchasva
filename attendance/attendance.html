@@ -1,0 +1,1160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mark Attendance | C Mastery</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0e17;
+            --bg-secondary: #111827;
+            --bg-card: #151d2e;
+            --bg-input: #1e293b;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --accent-cyan: #06b6d4;
+            --accent-purple: #8b5cf6;
+            --accent-green: #10b981;
+            --accent-red: #ef4444;
+            --accent-orange: #f59e0b;
+            --border-subtle: rgba(148, 163, 184, 0.1);
+            --gradient-primary: linear-gradient(135deg, #06b6d4, #8b5cf6);
+            --gradient-success: linear-gradient(135deg, #10b981, #06b6d4);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .header {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-subtle);
+            padding: 16px 24px;
+            text-align: center;
+        }
+
+        .logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+            font-size: 1.25rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-primary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Main Container */
+        .main {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 480px;
+        }
+
+        /* Card */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        /* Status Banner */
+        .status-banner {
+            padding: 16px 24px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .status-banner.valid {
+            background: rgba(16, 185, 129, 0.15);
+            border-bottom: 1px solid rgba(16, 185, 129, 0.3);
+            color: var(--accent-green);
+        }
+
+        .status-banner.expired {
+            background: rgba(239, 68, 68, 0.15);
+            border-bottom: 1px solid rgba(239, 68, 68, 0.3);
+            color: var(--accent-red);
+        }
+
+        .status-banner.invalid {
+            background: rgba(245, 158, 11, 0.15);
+            border-bottom: 1px solid rgba(245, 158, 11, 0.3);
+            color: var(--accent-orange);
+        }
+
+        /* Day Info */
+        .day-info {
+            padding: 24px;
+            text-align: center;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .day-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            background: var(--gradient-primary);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--bg-primary);
+            margin-bottom: 12px;
+        }
+
+        .day-topic {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .day-date {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* Timer */
+        .timer-section {
+            padding: 16px 24px;
+            background: var(--bg-secondary);
+            text-align: center;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .timer-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+
+        .timer {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-cyan);
+        }
+
+        .timer.urgent {
+            color: var(--accent-orange);
+            animation: pulse 1s infinite;
+        }
+
+        .timer.expired {
+            color: var(--accent-red);
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        /* Form */
+        .form-section {
+            padding: 24px;
+        }
+
+        .form-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+        }
+
+        .form-label span {
+            color: var(--accent-red);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            background: var(--bg-input);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            font-family: inherit;
+            transition: all 0.3s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.1);
+        }
+
+        .form-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .form-input:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .form-hint {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 6px;
+        }
+
+        /* Remember Me */
+        .remember-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 24px;
+        }
+
+        .remember-checkbox {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--accent-cyan);
+            cursor: pointer;
+        }
+
+        .remember-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+        }
+
+        /* Submit Button */
+        .btn-submit {
+            width: 100%;
+            padding: 16px;
+            background: var(--gradient-primary);
+            border: none;
+            border-radius: 12px;
+            color: var(--bg-primary);
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-submit:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(6, 182, 212, 0.4);
+        }
+
+        .btn-submit:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Loading */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Error Message */
+        .error-message {
+            padding: 12px 16px;
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 10px;
+            color: var(--accent-red);
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        /* Success State */
+        .success-container {
+            display: none;
+            padding: 48px 24px;
+            text-align: center;
+        }
+
+        .success-container.show {
+            display: block;
+        }
+
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--gradient-success);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin: 0 auto 24px;
+            animation: scaleIn 0.5s ease;
+        }
+
+        @keyframes scaleIn {
+            from { transform: scale(0); }
+            to { transform: scale(1); }
+        }
+
+        .success-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .success-subtitle {
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+        }
+
+        .success-details {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+
+        .success-detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .success-detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .success-detail-label {
+            color: var(--text-secondary);
+        }
+
+        .success-detail-value {
+            font-weight: 600;
+        }
+
+        .success-stats {
+            padding: 16px;
+            background: rgba(6, 182, 212, 0.1);
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            border-radius: 12px;
+            margin-bottom: 24px;
+        }
+
+        .success-stats-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 4px;
+        }
+
+        .success-stats-value {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--accent-cyan);
+        }
+
+        .success-streak {
+            color: var(--accent-orange);
+            font-size: 0.9rem;
+            margin-top: 4px;
+        }
+
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            background: var(--bg-input);
+            border: 1px solid var(--border-subtle);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .btn-back:hover {
+            background: rgba(6, 182, 212, 0.15);
+            border-color: var(--accent-cyan);
+        }
+
+        /* Error State (Full) */
+        .error-container {
+            display: none;
+            padding: 48px 24px;
+            text-align: center;
+        }
+
+        .error-container.show {
+            display: block;
+        }
+
+        .error-icon {
+            width: 80px;
+            height: 80px;
+            background: rgba(239, 68, 68, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin: 0 auto 24px;
+        }
+
+        .error-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--accent-red);
+        }
+
+        .error-subtitle {
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+        }
+
+        /* Manual Code Entry */
+        .manual-code-section {
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border-subtle);
+        }
+
+        .manual-code-title {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+            text-align: center;
+        }
+
+        .manual-code-input {
+            display: flex;
+            gap: 8px;
+        }
+
+        .manual-code-input .form-input {
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-family: 'JetBrains Mono', monospace;
+            text-align: center;
+        }
+
+        .btn-verify {
+            padding: 14px 20px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            color: var(--accent-cyan);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .btn-verify:hover {
+            background: rgba(6, 182, 212, 0.15);
+            border-color: var(--accent-cyan);
+        }
+
+        /* Footer */
+        .footer {
+            padding: 16px;
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border-subtle);
+        }
+
+        /* Hidden */
+        .hidden {
+            display: none !important;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .main {
+                padding: 16px;
+            }
+            
+            .day-topic {
+                font-size: 1.1rem;
+            }
+            
+            .form-section, .day-info {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">
+            <div class="logo-icon">C</div>
+            <span>C Mastery</span>
+        </div>
+    </header>
+
+    <!-- Main -->
+    <main class="main">
+        <div class="container">
+            <div class="card">
+                <!-- Status Banner -->
+                <div class="status-banner valid" id="statusBanner">
+                    ✅ Valid QR Code Detected
+                </div>
+
+                <!-- Day Info -->
+                <div class="day-info" id="dayInfoSection">
+                    <div class="day-badge" id="dayBadge">Day 1</div>
+                    <div class="day-topic" id="dayTopic">Introduction to C</div>
+                    <div class="day-date" id="dayDate">Loading...</div>
+                </div>
+
+                <!-- Timer -->
+                <div class="timer-section" id="timerSection">
+                    <div class="timer-label">Code expires in</div>
+                    <div class="timer" id="timer">--:--</div>
+                </div>
+
+                <!-- Form Section -->
+                <div class="form-section" id="formSection">
+                    <h3 class="form-title">📝 Mark Your Attendance</h3>
+                    
+                    <div class="error-message" id="errorMessage"></div>
+
+                    <form id="attendanceForm">
+                        <div class="form-group">
+                            <label class="form-label">Full Name <span>*</span></label>
+                            <input type="text" class="form-input" id="studentName" placeholder="Enter your full name" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Roll Number <span>*</span></label>
+                            <input type="text" class="form-input" id="rollNumber" placeholder="e.g., CS2024-001" required>
+                            <div class="form-hint">Enter your enrolled roll number</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Email Address <span>*</span></label>
+                            <input type="email" class="form-input" id="email" placeholder="your.email@example.com" required>
+                        </div>
+
+                        <div class="remember-group">
+                            <input type="checkbox" class="remember-checkbox" id="rememberMe" checked>
+                            <label class="remember-label" for="rememberMe">Remember my details on this device</label>
+                        </div>
+
+                        <button type="submit" class="btn-submit" id="submitBtn">
+                            ✅ Mark My Attendance
+                        </button>
+                    </form>
+
+                    <!-- Manual Code Entry (shown when QR fails) -->
+                    <div class="manual-code-section" id="manualCodeSection" style="display: none;">
+                        <div class="manual-code-title">Or enter code manually</div>
+                        <div class="manual-code-input">
+                            <input type="text" class="form-input" id="manualCode" placeholder="XXXXXX" maxlength="6">
+                            <button type="button" class="btn-verify" id="verifyCodeBtn">Verify</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Success State -->
+                <div class="success-container" id="successContainer">
+                    <div class="success-icon">🎉</div>
+                    <h2 class="success-title">Attendance Marked!</h2>
+                    <p class="success-subtitle">Your attendance has been recorded successfully.</p>
+                    
+                    <div class="success-details">
+                        <div class="success-detail-row">
+                            <span class="success-detail-label">Day</span>
+                            <span class="success-detail-value" id="successDay">Day 1</span>
+                        </div>
+                        <div class="success-detail-row">
+                            <span class="success-detail-label">Topic</span>
+                            <span class="success-detail-value" id="successTopic">Introduction to C</span>
+                        </div>
+                        <div class="success-detail-row">
+                            <span class="success-detail-label">Name</span>
+                            <span class="success-detail-value" id="successName">-</span>
+                        </div>
+                        <div class="success-detail-row">
+                            <span class="success-detail-label">Time</span>
+                            <span class="success-detail-value" id="successTime">-</span>
+                        </div>
+                    </div>
+
+                    <div class="success-stats">
+                        <div class="success-stats-label">Your Attendance</div>
+                        <div class="success-stats-value" id="successStats">- / - days (--%)</div>
+                        <div class="success-streak" id="successStreak"></div>
+                    </div>
+
+                    <a href="student.html" class="btn-back" id="viewDashboardLink">
+                        📊 View Dashboard
+                    </a>
+                </div>
+
+                <!-- Error State -->
+                <div class="error-container" id="errorContainer">
+                    <div class="error-icon">❌</div>
+                    <h2 class="error-title" id="errorTitle">Code Expired</h2>
+                    <p class="error-subtitle" id="errorSubtitle">This attendance code is no longer valid. Please ask your instructor for a new QR code.</p>
+                    
+                    <div class="manual-code-section">
+                        <div class="manual-code-title">Have a new code? Enter it here:</div>
+                        <div class="manual-code-input">
+                            <input type="text" class="form-input" id="retryCode" placeholder="XXXXXX" maxlength="6">
+                            <button type="button" class="btn-verify" id="retryCodeBtn">Verify</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        Having issues? Contact your instructor via WhatsApp.
+    </footer>
+
+    <script>
+        // ═══════════════════════════════════════════════════════════════
+        // CONFIGURATION
+        // ═══════════════════════════════════════════════════════════════
+        
+        const CONFIG = {
+            // Your deployed Google Apps Script Web App URL
+            API_URL: 'https://script.google.com/macros/s/AKfycbxIYkCytSFuVcs-OJ_yMzlh7PEIyUGjB1XVXZRKa5hDddfowqGrrpCEkpG3zYghJmhAmA/exec',
+            
+            // Course topics
+            TOPICS: [
+                "Introduction to C & Computer Fundamentals",
+                "Algorithmic Thinking & Problem Solving",
+                "What is Programming? Why C?",
+                "Hello World & Compilation Process",
+                "Input/Output & Basic Interaction",
+                "Data Types & Variables",
+                "Operators & Expressions",
+                "Relational & Logical Operators",
+                "Decision Making - if/else",
+                "switch-case & Practice",
+                "while Loop",
+                "for Loop",
+                "do-while & Nested Loops",
+                "Loop Mastery & Problem Solving",
+                "PROJECT 1: CLI Calculator",
+                "Introduction to Functions",
+                "Function Parameters & Return Values",
+                "Scope & Storage Classes",
+                "Recursion",
+                "Function Best Practices & Review",
+                "One-Dimensional Arrays",
+                "Array Algorithms - Part 1",
+                "Array Algorithms - Part 2",
+                "Two-Dimensional Arrays",
+                "Arrays & Functions",
+                "Strings as Character Arrays",
+                "String Library Functions",
+                "String Manipulation",
+                "Array of Strings",
+                "PROJECT 2: Text Analyzer (Intro)",
+                "Memory Addresses",
+                "Introduction to Pointers",
+                "Pointer Arithmetic",
+                "Pointers and Arrays",
+                "PROJECT 2: Text Analyzer (Implementation)",
+                "Pointers and Functions",
+                "Pointers and Strings",
+                "Dynamic Memory Allocation",
+                "Memory Management & Debugging",
+                "Pointers - Advanced Concepts",
+                "Structures - Basics",
+                "Array of Structures & Functions",
+                "File I/O - Basics",
+                "File I/O - Advanced",
+                "PROJECT 3: Contact Manager",
+                "Linked Lists - Concept & Node Creation",
+                "Linked Lists - Operations Part 1",
+                "Linked Lists - Operations Part 2",
+                "Stacks and Queues",
+                "Data Structures Review & Integration",
+                "Preprocessor & Macros",
+                "Multi-File Programs & Header Files",
+                "Command Line Arguments & Bit Manipulation",
+                "Debugging, Testing & Code Quality",
+                "Common Patterns & Best Practices",
+                "Final Project - Planning",
+                "Final Project - Day 1 Implementation",
+                "Final Project - Day 2 Implementation",
+                "Final Project - Day 3 Implementation",
+                "Final Project - Completion & Review",
+                "Performance & Optimization",
+                "Common Pitfalls & Debugging Strategies",
+                "C in the Real World",
+                "Interview Preparation - Technical",
+                "Next Steps & Course Conclusion"
+            ]
+        };
+
+        // ═══════════════════════════════════════════════════════════════
+        // STATE
+        // ═══════════════════════════════════════════════════════════════
+        
+        let state = {
+            day: null,
+            code: null,
+            expiresAt: null,
+            timerInterval: null,
+            isValid: false
+        };
+
+        // ═══════════════════════════════════════════════════════════════
+        // INITIALIZATION
+        // ═══════════════════════════════════════════════════════════════
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            parseURLParams();
+            loadSavedDetails();
+            setupEventListeners();
+            
+            if (state.code && state.day) {
+                validateAndDisplay();
+            } else {
+                showManualEntry();
+            }
+        });
+
+        function parseURLParams() {
+            const params = new URLSearchParams(window.location.search);
+            state.day = parseInt(params.get('day')) || null;
+            state.code = params.get('code') || null;
+            state.expiresAt = params.get('exp') ? new Date(parseInt(params.get('exp'))) : null;
+        }
+
+        function loadSavedDetails() {
+            const saved = localStorage.getItem('cmastery_student');
+            if (saved) {
+                try {
+                    const data = JSON.parse(saved);
+                    document.getElementById('studentName').value = data.name || '';
+                    document.getElementById('rollNumber').value = data.roll || '';
+                    document.getElementById('email').value = data.email || '';
+                } catch (e) {
+                    console.error('Error loading saved details:', e);
+                }
+            }
+        }
+
+        function setupEventListeners() {
+            // Form submission
+            document.getElementById('attendanceForm').addEventListener('submit', handleSubmit);
+            
+            // Manual code verification
+            document.getElementById('verifyCodeBtn')?.addEventListener('click', verifyManualCode);
+            document.getElementById('retryCodeBtn')?.addEventListener('click', retryWithCode);
+            
+            // Auto-uppercase roll number
+            document.getElementById('rollNumber').addEventListener('input', (e) => {
+                e.target.value = e.target.value.toUpperCase();
+            });
+            
+            // Auto-uppercase manual code
+            document.getElementById('manualCode')?.addEventListener('input', (e) => {
+                e.target.value = e.target.value.toUpperCase();
+            });
+            document.getElementById('retryCode')?.addEventListener('input', (e) => {
+                e.target.value = e.target.value.toUpperCase();
+            });
+        }
+
+        // ═══════════════════════════════════════════════════════════════
+        // VALIDATION & DISPLAY
+        // ═══════════════════════════════════════════════════════════════
+        
+        function validateAndDisplay() {
+            // Update day info
+            const topic = CONFIG.TOPICS[state.day - 1] || 'Unknown Topic';
+            document.getElementById('dayBadge').textContent = `Day ${state.day}`;
+            document.getElementById('dayTopic').textContent = topic;
+            document.getElementById('dayDate').textContent = new Date().toLocaleDateString('en-IN', { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+
+            // Check expiry
+            if (state.expiresAt && new Date() > state.expiresAt) {
+                showExpiredState();
+                return;
+            }
+
+            // Show valid state
+            state.isValid = true;
+            showValidState();
+            startTimer();
+        }
+
+        function showValidState() {
+            document.getElementById('statusBanner').className = 'status-banner valid';
+            document.getElementById('statusBanner').textContent = '✅ Valid QR Code Detected';
+            document.getElementById('formSection').classList.remove('hidden');
+            document.getElementById('errorContainer').classList.remove('show');
+            document.getElementById('successContainer').classList.remove('show');
+
+            // Once a valid code is active (QR or manual),
+            // hide the inline manual-code prompt inside the form
+            const inlineManualSection = document.getElementById('manualCodeSection');
+            if (inlineManualSection) {
+                inlineManualSection.style.display = 'none';
+            }
+        }
+
+        function showExpiredState() {
+            document.getElementById('statusBanner').className = 'status-banner expired';
+            document.getElementById('statusBanner').textContent = '❌ Code Expired';
+            document.getElementById('formSection').classList.add('hidden');
+            document.getElementById('errorContainer').classList.add('show');
+            document.getElementById('errorTitle').textContent = 'Code Expired';
+            document.getElementById('errorSubtitle').textContent = 'This attendance code is no longer valid. Please ask your instructor for a new QR code.';
+            
+            // Hide timer
+            document.getElementById('timerSection').style.display = 'none';
+        }
+
+        function showInvalidState(message) {
+            document.getElementById('statusBanner').className = 'status-banner invalid';
+            document.getElementById('statusBanner').textContent = '⚠️ Invalid Code';
+            document.getElementById('formSection').classList.add('hidden');
+            document.getElementById('errorContainer').classList.add('show');
+            document.getElementById('errorTitle').textContent = 'Invalid Code';
+            document.getElementById('errorSubtitle').textContent = message || 'The code you entered is not valid. Please check with your instructor.';
+        }
+
+        function showManualEntry() {
+            document.getElementById('statusBanner').className = 'status-banner invalid';
+            document.getElementById('statusBanner').textContent = '📝 Enter Attendance Code';
+            document.getElementById('dayInfoSection').style.display = 'none';
+            document.getElementById('timerSection').style.display = 'none';
+            document.getElementById('formSection').classList.add('hidden');
+            document.getElementById('manualCodeSection').style.display = 'block';
+            
+            // Show manual entry in error container style
+            document.getElementById('errorContainer').classList.add('show');
+            document.getElementById('errorTitle').textContent = 'No Code Detected';
+            document.getElementById('errorSubtitle').textContent = 'Scan the QR code shown by your instructor, or enter the code manually below.';
+        }
+
+        // ═══════════════════════════════════════════════════════════════
+        // TIMER
+        // ═══════════════════════════════════════════════════════════════
+        
+        function startTimer() {
+            updateTimer();
+            state.timerInterval = setInterval(updateTimer, 1000);
+        }
+
+        function updateTimer() {
+            if (!state.expiresAt) {
+                document.getElementById('timer').textContent = 'No expiry';
+                return;
+            }
+
+            const now = new Date();
+            const remaining = state.expiresAt - now;
+
+            if (remaining <= 0) {
+                clearInterval(state.timerInterval);
+                showExpiredState();
+                return;
+            }
+
+            const minutes = Math.floor(remaining / 60000);
+            const seconds = Math.floor((remaining % 60000) / 1000);
+            const timeStr = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+            const timerEl = document.getElementById('timer');
+            timerEl.textContent = timeStr;
+            
+            // Add urgent class if less than 2 minutes
+            if (remaining < 120000) {
+                timerEl.classList.add('urgent');
+            } else {
+                timerEl.classList.remove('urgent');
+            }
+        }
+
+        // ═══════════════════════════════════════════════════════════════
+        // FORM SUBMISSION
+        // ═══════════════════════════════════════════════════════════════
+        
+        async function handleSubmit(e) {
+            e.preventDefault();
+
+            const btn = document.getElementById('submitBtn');
+            const errorEl = document.getElementById('errorMessage');
+
+            // Get form values
+            const name = document.getElementById('studentName').value.trim();
+            const roll = document.getElementById('rollNumber').value.trim().toUpperCase();
+            const email = document.getElementById('email').value.trim().toLowerCase();
+            const remember = document.getElementById('rememberMe').checked;
+
+            // Validate
+            if (!name || !roll || !email) {
+                showError('Please fill all required fields');
+                return;
+            }
+
+            // Check if still valid
+            if (state.expiresAt && new Date() > state.expiresAt) {
+                showExpiredState();
+                return;
+            }
+
+            // Save details if requested
+            if (remember) {
+                localStorage.setItem('cmastery_student', JSON.stringify({ name, roll, email }));
+            }
+
+            // Disable button
+            btn.disabled = true;
+            btn.innerHTML = '<span class="loading"></span> Marking...';
+            errorEl.classList.remove('show');
+
+            try {
+                // Detect device
+                const device = /Mobile|Android|iPhone/i.test(navigator.userAgent) ? 'Mobile' : 'Desktop';
+
+                // Use GET request (CORS-friendly)
+                // NOTE: Do NOT pre-encode values; URLSearchParams handles encoding
+                const params = new URLSearchParams({
+                    action: 'markAttendance',
+                    day: state.day,
+                    studentName: name,
+                    rollNumber: roll,
+                    email: email,
+                    code: state.code,
+                    device: device
+                });
+                
+                const response = await fetch(`${CONFIG.API_URL}?${params.toString()}`);
+
+                const result = await response.json();
+
+                if (result.success) {
+                    showSuccess(result.data, name);
+                } else {
+                    if (result.data?.status === 'Duplicate') {
+                        showError('You have already marked attendance for today!');
+                    } else if (result.data?.status === 'Expired') {
+                        showExpiredState();
+                    } else {
+                        showError(result.message || 'Failed to mark attendance');
+                    }
+                }
+            } catch (error) {
+                console.error('Error while marking attendance:', error);
+                showError('Could not contact attendance server. Please try again or contact your instructor.');
+            }
+
+            btn.disabled = false;
+            btn.innerHTML = '✅ Mark My Attendance';
+        }
+
+        function showError(message) {
+            const errorEl = document.getElementById('errorMessage');
+            errorEl.textContent = message;
+            errorEl.classList.add('show');
+        }
+
+        function showSuccess(data, name) {
+            // Hide form, show success
+            document.getElementById('formSection').classList.add('hidden');
+            document.getElementById('successContainer').classList.add('show');
+            document.getElementById('statusBanner').className = 'status-banner valid';
+            document.getElementById('statusBanner').textContent = '✅ Attendance Marked Successfully';
+
+            // Update success details
+            const topic = CONFIG.TOPICS[state.day - 1] || 'Unknown';
+            document.getElementById('successDay').textContent = `Day ${state.day}`;
+            document.getElementById('successTopic').textContent = topic;
+            document.getElementById('successName').textContent = name;
+            document.getElementById('successTime').textContent = new Date().toLocaleTimeString('en-IN');
+
+            // Update stats
+            const total = data.totalAttendance || 1;
+            const percent = data.attendancePercent || 100;
+            document.getElementById('successStats').textContent = `${total} / ${state.day} days (${percent}%)`;
+
+            // Streak message
+            if (total === state.day) {
+                document.getElementById('successStreak').textContent = `🔥 Perfect attendance! ${total}-day streak!`;
+            } else if (percent >= 90) {
+                document.getElementById('successStreak').textContent = '⭐ Excellent attendance!';
+            } else if (percent >= 75) {
+                document.getElementById('successStreak').textContent = '👍 Good attendance!';
+            } else {
+                document.getElementById('successStreak').textContent = '📈 Keep attending to improve!';
+            }
+
+            // Stop timer
+            if (state.timerInterval) {
+                clearInterval(state.timerInterval);
+            }
+
+            // Update "View Dashboard" link to include this student's roll number
+            const roll = document.getElementById('rollNumber').value.trim().toUpperCase();
+            const dashboardLink = document.getElementById('viewDashboardLink');
+            if (dashboardLink && roll) {
+                const url = new URL('student.html', window.location.origin);
+                url.searchParams.set('roll', roll);
+                dashboardLink.href = url.toString();
+            }
+        }
+
+        // ═══════════════════════════════════════════════════════════════
+        // MANUAL CODE ENTRY
+        // ═══════════════════════════════════════════════════════════════
+        
+        async function verifyManualCode() {
+            const code = document.getElementById('manualCode').value.trim().toUpperCase();
+            if (!code || code.length < 4) {
+                alert('Please enter a valid code');
+                return;
+            }
+            try {
+                const params = new URLSearchParams({
+                    action: 'validateCode',
+                    code: code
+                });
+
+                // If a day is already known (e.g., from ?day=6), send it too
+                if (state.day) {
+                    params.append('day', state.day);
+                }
+
+                const response = await fetch(`${CONFIG.API_URL}?${params.toString()}`);
+                const result = await response.json();
+
+                if (result.success) {
+                    state.code = code;
+
+                    // If backend returns canonical day/expiry, use them
+                    if (!state.day && result.data?.day) {
+                        state.day = result.data.day;
+                    }
+                    state.expiresAt = result.data?.expiresAt
+                        ? new Date(result.data.expiresAt)
+                        : null;
+
+                    document.getElementById('errorContainer').classList.remove('show');
+                    document.getElementById('dayInfoSection').style.display = 'block';
+                    document.getElementById('timerSection').style.display = 'block';
+
+                    validateAndDisplay();
+                } else {
+                    showInvalidState(result.message || 'The code you entered is not valid. Please check with your instructor.');
+                }
+            } catch (error) {
+                console.error('Error validating manual code:', error);
+                showInvalidState('Could not validate code. Please try again or contact your instructor.');
+            }
+        }
+
+        async function retryWithCode() {
+            const code = document.getElementById('retryCode').value.trim().toUpperCase();
+            if (!code || code.length < 4) {
+                alert('Please enter a valid code');
+                return;
+            }
+            try {
+                const params = new URLSearchParams({
+                    action: 'validateCode',
+                    code: code
+                });
+
+                if (state.day) {
+                    params.append('day', state.day);
+                }
+
+                const response = await fetch(`${CONFIG.API_URL}?${params.toString()}`);
+                const result = await response.json();
+
+                if (result.success) {
+                    state.code = code;
+
+                    if (!state.day && result.data?.day) {
+                        state.day = result.data.day;
+                    }
+                    state.expiresAt = result.data?.expiresAt
+                        ? new Date(result.data.expiresAt)
+                        : null;
+
+                    document.getElementById('errorContainer').classList.remove('show');
+                    document.getElementById('timerSection').style.display = 'block';
+
+                    validateAndDisplay();
+                } else {
+                    showInvalidState(result.message || 'The code you entered is not valid. Please check with your instructor.');
+                }
+            } catch (error) {
+                console.error('Error validating retry code:', error);
+                showInvalidState('Could not validate code. Please try again or contact your instructor.');
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,1379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instructor Panel | C Mastery Attendance</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        :root {
+            --bg-primary: #0a0e17;
+            --bg-secondary: #111827;
+            --bg-card: #151d2e;
+            --bg-input: #1e293b;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --accent-cyan: #06b6d4;
+            --accent-purple: #8b5cf6;
+            --accent-green: #10b981;
+            --accent-red: #ef4444;
+            --accent-orange: #f59e0b;
+            --border-subtle: rgba(148, 163, 184, 0.1);
+            --gradient-primary: linear-gradient(135deg, #06b6d4, #8b5cf6);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-subtle);
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+            font-size: 1.25rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-primary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .header-badge {
+            padding: 8px 16px;
+            background: rgba(139, 92, 246, 0.2);
+            border: 1px solid rgba(139, 92, 246, 0.4);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: var(--accent-purple);
+        }
+
+        /* Main Layout */
+        .main {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            min-height: calc(100vh - 73px);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border-subtle);
+            padding: 24px;
+        }
+
+        .sidebar-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+        }
+
+        .nav-item:hover {
+            background: var(--bg-card);
+            color: var(--text-primary);
+        }
+
+        .nav-item.active {
+            background: rgba(6, 182, 212, 0.15);
+            color: var(--accent-cyan);
+            border: 1px solid rgba(6, 182, 212, 0.3);
+        }
+
+        .nav-icon { font-size: 1.25rem; }
+
+        .nav-item.coming-soon {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .coming-soon-badge {
+            font-size: 0.65rem;
+            padding: 2px 6px;
+            background: var(--bg-card);
+            border-radius: 4px;
+            margin-left: auto;
+        }
+
+        /* Content Area */
+        .content {
+            padding: 32px;
+            overflow-y: auto;
+        }
+
+        .content-header {
+            margin-bottom: 32px;
+        }
+
+        .content-title {
+            font-size: 1.75rem;
+            margin-bottom: 8px;
+        }
+
+        .content-subtitle {
+            color: var(--text-secondary);
+        }
+
+        /* Cards */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .card-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-title-icon {
+            font-size: 1.25rem;
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .form-select, .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            background: var(--bg-input);
+            border: 1px solid var(--border-subtle);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            font-family: inherit;
+            transition: all 0.3s;
+        }
+
+        .form-select:focus, .form-input:focus {
+            outline: none;
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.1);
+        }
+
+        .form-select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%2394a3b8' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10l-5 5z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+        }
+
+        /* Day Info */
+        .day-info {
+            padding: 16px;
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            margin-top: 16px;
+        }
+
+        .day-info-topic {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 4px;
+        }
+
+        .day-info-date {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* Expiry Buttons */
+        .expiry-options {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .expiry-btn {
+            padding: 10px 20px;
+            background: var(--bg-input);
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: inherit;
+            font-size: 0.9rem;
+        }
+
+        .expiry-btn:hover {
+            border-color: var(--accent-cyan);
+            color: var(--text-primary);
+        }
+
+        .expiry-btn.active {
+            background: rgba(6, 182, 212, 0.15);
+            border-color: var(--accent-cyan);
+            color: var(--accent-cyan);
+        }
+
+        /* Generate Button */
+        .btn-generate {
+            width: 100%;
+            padding: 16px;
+            background: var(--gradient-primary);
+            border: none;
+            border-radius: 12px;
+            color: var(--bg-primary);
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 24px;
+        }
+
+        .btn-generate:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(6, 182, 212, 0.4);
+        }
+
+        .btn-generate:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* QR Display */
+        .qr-container {
+            text-align: center;
+            padding: 32px;
+        }
+
+        .qr-placeholder {
+            width: 250px;
+            height: 250px;
+            background: var(--bg-secondary);
+            border: 2px dashed var(--border-subtle);
+            border-radius: 16px;
+            margin: 0 auto 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+        }
+
+        .qr-code {
+            width: 250px;
+            height: 250px;
+            background: white;
+            border-radius: 16px;
+            margin: 0 auto 24px;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .qr-code img {
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        /* Timer */
+        .timer-container {
+            margin-bottom: 24px;
+        }
+
+        .timer {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .timer.expired {
+            background: var(--accent-red);
+            -webkit-background-clip: text;
+            background-clip: text;
+        }
+
+        .timer-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        /* Backup Code */
+        .backup-code-container {
+            padding: 20px;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            margin-bottom: 24px;
+        }
+
+        .backup-code-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .backup-code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: 4px;
+            color: var(--accent-cyan);
+        }
+
+        .backup-code-hint {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 8px;
+        }
+
+        /* Action Buttons */
+        .qr-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .btn-action {
+            padding: 12px 24px;
+            background: var(--bg-input);
+            border: 1px solid var(--border-subtle);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: inherit;
+        }
+
+        .btn-action:hover {
+            background: rgba(6, 182, 212, 0.15);
+            border-color: var(--accent-cyan);
+        }
+
+        /* Live Attendance */
+        .attendance-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .attendance-count {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+        }
+
+        .attendance-number {
+            font-size: 3rem;
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .attendance-total {
+            font-size: 1.5rem;
+            color: var(--text-muted);
+        }
+
+        .attendance-progress {
+            height: 12px;
+            background: var(--bg-input);
+            border-radius: 6px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .attendance-progress-bar {
+            height: 100%;
+            background: var(--gradient-primary);
+            border-radius: 6px;
+            transition: width 0.5s ease;
+        }
+
+        .attendance-list {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .attendance-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+
+        .attendance-item-name {
+            font-weight: 500;
+        }
+
+        .attendance-item-time {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .refresh-indicator {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .refresh-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent-green);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        /* Full Screen Modal */
+        .fullscreen-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: var(--bg-primary);
+            z-index: 1000;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+        }
+
+        .fullscreen-modal.active {
+            display: flex;
+        }
+
+        .fullscreen-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 48px;
+            height: 48px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 50%;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .fullscreen-qr {
+            width: 400px;
+            height: 400px;
+            background: white;
+            border-radius: 24px;
+            padding: 24px;
+            margin-bottom: 32px;
+        }
+
+        .fullscreen-qr img {
+            width: 100%;
+            height: 100%;
+        }
+
+        .fullscreen-code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 4rem;
+            font-weight: 700;
+            letter-spacing: 8px;
+            color: var(--accent-cyan);
+            margin-bottom: 16px;
+        }
+
+        .fullscreen-timer {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 2rem;
+            color: var(--text-secondary);
+        }
+
+        .fullscreen-day {
+            font-size: 1.5rem;
+            color: var(--text-muted);
+            margin-bottom: 24px;
+        }
+
+        /* Status Messages */
+        .status-message {
+            padding: 12px 16px;
+            border-radius: 10px;
+            margin-top: 16px;
+            display: none;
+        }
+
+        .status-message.success {
+            display: block;
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: var(--accent-green);
+        }
+
+        .status-message.error {
+            display: block;
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: var(--accent-red);
+        }
+
+        /* Loading */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--text-muted);
+            border-top-color: var(--accent-cyan);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Admin Login Overlay */
+        .login-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.96);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1100;
+        }
+
+        .login-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 20px;
+            padding: 32px 28px;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: 0 20px 50px rgba(15, 23, 42, 0.8);
+        }
+
+        .login-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .login-subtitle {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+
+        .login-error {
+            min-height: 18px;
+            margin-bottom: 16px;
+            font-size: 0.85rem;
+            color: var(--accent-red);
+            display: none;
+        }
+
+        .login-error.show {
+            display: block;
+        }
+
+        .login-button {
+            margin-top: 4px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .main {
+                grid-template-columns: 1fr;
+            }
+            .sidebar {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                padding: 20px;
+            }
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            .qr-code, .qr-placeholder {
+                width: 200px;
+                height: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">
+            <div class="logo-icon">C</div>
+            <span>C Mastery</span>
+        </div>
+        <div class="header-badge">🎓 Instructor Panel</div>
+    </header>
+
+    <!-- Main Layout -->
+    <div class="main">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-title">Menu</div>
+            <div class="nav-item active" data-section="attendance">
+                <span class="nav-icon">📋</span>
+                <span>Attendance</span>
+
+            <!-- Admin Login Overlay -->
+            <div class="login-overlay" id="loginOverlay">
+                <div class="login-card">
+                    <div class="login-title">Instructor Login</div>
+                    <div class="login-subtitle">Enter admin credentials to access the attendance panel.</div>
+                    <div class="form-group">
+                        <label class="form-label" for="adminUsername">Username</label>
+                        <input class="form-input" id="adminUsername" autocomplete="username" />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="adminPassword">Password</label>
+                        <input type="password" class="form-input" id="adminPassword" autocomplete="current-password" />
+                    </div>
+                    <div class="login-error" id="loginError"></div>
+                    <button class="btn-generate login-button" id="loginBtn">
+                        🔐 Login as Instructor
+                    </button>
+                </div>
+            </div>
+            </div>
+            <div class="nav-item coming-soon" data-section="content">
+                <span class="nav-icon">📚</span>
+                <span>Content</span>
+                <span class="coming-soon-badge">v1.1</span>
+            </div>
+            <div class="nav-item coming-soon" data-section="students">
+                <span class="nav-icon">👥</span>
+                <span>Students</span>
+                <span class="coming-soon-badge">v1.1</span>
+            </div>
+            <div class="nav-item coming-soon" data-section="reports">
+                <span class="nav-icon">📊</span>
+                <span>Reports</span>
+                <span class="coming-soon-badge">v1.1</span>
+            </div>
+        </aside>
+
+        <!-- Content Area -->
+        <main class="content">
+            <div class="content-header">
+                <h1 class="content-title">📋 Attendance</h1>
+                <p class="content-subtitle">Generate QR codes for students to mark attendance</p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+                <!-- Left Column: Settings -->
+                <div>
+                    <!-- Class Selection -->
+                    <div class="card">
+                        <h3 class="card-title">
+                            <span class="card-title-icon">📅</span>
+                            Select Class
+                        </h3>
+                        <div class="form-group">
+                            <label class="form-label">Day Number</label>
+                            <select class="form-select" id="daySelect">
+                                <!-- Days 1-65 will be populated by JS -->
+                            </select>
+                        </div>
+                        <div class="day-info" id="dayInfo">
+                            <div class="day-info-topic" id="dayTopic">Select a day</div>
+                            <div class="day-info-date" id="dayDate">—</div>
+                        </div>
+                    </div>
+
+                    <!-- QR Settings -->
+                    <div class="card">
+                        <h3 class="card-title">
+                            <span class="card-title-icon">⚙️</span>
+                            QR Code Settings
+                        </h3>
+                        <div class="form-group">
+                            <label class="form-label">Code Validity Duration</label>
+                            <div class="expiry-options">
+                                <button class="expiry-btn" data-minutes="5">5 min</button>
+                                <button class="expiry-btn active" data-minutes="10">10 min</button>
+                                <button class="expiry-btn" data-minutes="15">15 min</button>
+                                <button class="expiry-btn" data-minutes="30">30 min</button>
+                                <button class="expiry-btn" data-minutes="60">1 hour</button>
+                            </div>
+                        </div>
+                        <button class="btn-generate" id="generateBtn">
+                            🔄 Generate New QR Code
+                        </button>
+                        <div class="status-message" id="statusMessage"></div>
+                    </div>
+
+                    <!-- Live Attendance -->
+                    <div class="card">
+                        <div class="attendance-header">
+                            <h3 class="card-title" style="margin-bottom: 0;">
+                                <span class="card-title-icon">👥</span>
+                                Live Attendance
+                            </h3>
+                            <div class="refresh-indicator">
+                                <span class="refresh-dot"></span>
+                                <span>Auto-refresh</span>
+                            </div>
+                        </div>
+                        <div class="attendance-count">
+                            <span class="attendance-number" id="attendanceCount">0</span>
+                            <span class="attendance-total">/ <span id="totalStudents">30</span></span>
+                        </div>
+                        <div class="attendance-progress">
+                            <div class="attendance-progress-bar" id="attendanceBar" style="width: 0%"></div>
+                        </div>
+                        <div class="attendance-list" id="attendanceList">
+                            <div class="attendance-item" style="color: var(--text-muted); justify-content: center;">
+                                No attendance yet
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: QR Display -->
+                <div>
+                    <div class="card">
+                        <h3 class="card-title">
+                            <span class="card-title-icon">📱</span>
+                            QR Code
+                        </h3>
+                        <div class="qr-container">
+                            <!-- QR Placeholder (before generation) -->
+                            <div class="qr-placeholder" id="qrPlaceholder">
+                                <span>Click "Generate" to create QR</span>
+                            </div>
+                            <!-- QR Code (after generation) -->
+                            <div class="qr-code" id="qrCode" style="display: none;"></div>
+
+                            <!-- Timer -->
+                            <div class="timer-container" id="timerContainer" style="display: none;">
+                                <div class="timer" id="timer">10:00</div>
+                                <div class="timer-label">Time remaining</div>
+                            </div>
+
+                            <!-- Backup Code -->
+                            <div class="backup-code-container" id="backupContainer" style="display: none;">
+                                <div class="backup-code-label">Backup Code (share verbally)</div>
+                                <div class="backup-code" id="backupCode">------</div>
+                                <div class="backup-code-hint">Use if students can't scan QR</div>
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div class="qr-actions" id="qrActions" style="display: none;">
+                                <button class="btn-action" id="fullscreenBtn">
+                                    📺 Full Screen
+                                </button>
+                                <button class="btn-action" id="copyCodeBtn">
+                                    📋 Copy Code
+                                </button>
+                                <button class="btn-action" id="refreshBtn">
+                                    🔄 Regenerate
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Full Screen Modal -->
+    <div class="fullscreen-modal" id="fullscreenModal">
+        <button class="fullscreen-close" id="fullscreenClose">×</button>
+        <div class="fullscreen-day" id="fullscreenDay">Day 1: Introduction to C</div>
+        <div class="fullscreen-qr" id="fullscreenQR"></div>
+        <div class="fullscreen-code" id="fullscreenCode">------</div>
+        <div class="fullscreen-timer" id="fullscreenTimer">Expires in: 10:00</div>
+    </div>
+
+    <script>
+        // ═══════════════════════════════════════════════════════════════
+        // CONFIGURATION
+        // ═══════════════════════════════════════════════════════════════
+        
+        const CONFIG = {
+            // Your deployed Google Apps Script Web App URL
+            API_URL: 'https://script.google.com/macros/s/AKfycbxIYkCytSFuVcs-OJ_yMzlh7PEIyUGjB1XVXZRKa5hDddfowqGrrpCEkpG3zYghJmhAmA/exec',
+            
+            // Base URL for attendance page (where QR points to)
+            ATTENDANCE_URL: window.location.href.replace('instructor.html', 'attendance.html'),
+            
+            // Total students in batch
+            TOTAL_STUDENTS: 30,
+            
+            // Refresh interval for attendance (ms)
+            REFRESH_INTERVAL: 30000,
+            
+            // Course topics (Day 1-65)
+            TOPICS: [
+                "Introduction to C & Computer Fundamentals",
+                "Algorithmic Thinking & Problem Solving",
+                "What is Programming? Why C?",
+                "Hello World & Compilation Process",
+                "Input/Output & Basic Interaction",
+                "Data Types & Variables",
+                "Operators & Expressions",
+                "Relational & Logical Operators",
+                "Decision Making - if/else",
+                "switch-case & Practice",
+                "while Loop",
+                "for Loop",
+                "do-while & Nested Loops",
+                "Loop Mastery & Problem Solving",
+                "PROJECT 1: CLI Calculator",
+                "Introduction to Functions",
+                "Function Parameters & Return Values",
+                "Scope & Storage Classes",
+                "Recursion",
+                "Function Best Practices & Review",
+                "One-Dimensional Arrays",
+                "Array Algorithms - Part 1",
+                "Array Algorithms - Part 2",
+                "Two-Dimensional Arrays",
+                "Arrays & Functions",
+                "Strings as Character Arrays",
+                "String Library Functions",
+                "String Manipulation",
+                "Array of Strings",
+                "PROJECT 2: Text Analyzer (Intro)",
+                "Memory Addresses",
+                "Introduction to Pointers",
+                "Pointer Arithmetic",
+                "Pointers and Arrays",
+                "PROJECT 2: Text Analyzer (Implementation)",
+                "Pointers and Functions",
+                "Pointers and Strings",
+                "Dynamic Memory Allocation",
+                "Memory Management & Debugging",
+                "Pointers - Advanced Concepts",
+                "Structures - Basics",
+                "Array of Structures & Functions",
+                "File I/O - Basics",
+                "File I/O - Advanced",
+                "PROJECT 3: Contact Manager",
+                "Linked Lists - Concept & Node Creation",
+                "Linked Lists - Operations Part 1",
+                "Linked Lists - Operations Part 2",
+                "Stacks and Queues",
+                "Data Structures Review & Integration",
+                "Preprocessor & Macros",
+                "Multi-File Programs & Header Files",
+                "Command Line Arguments & Bit Manipulation",
+                "Debugging, Testing & Code Quality",
+                "Common Patterns & Best Practices",
+                "Final Project - Planning",
+                "Final Project - Day 1 Implementation",
+                "Final Project - Day 2 Implementation",
+                "Final Project - Day 3 Implementation",
+                "Final Project - Completion & Review",
+                "Performance & Optimization",
+                "Common Pitfalls & Debugging Strategies",
+                "C in the Real World",
+                "Interview Preparation - Technical",
+                "Next Steps & Course Conclusion"
+            ]
+        };
+
+        // ═══════════════════════════════════════════════════════════════
+        // STATE
+        // ═══════════════════════════════════════════════════════════════
+        
+        let state = {
+            selectedDay: 1,
+            expiryMinutes: 10,
+            currentCode: null,
+            expiresAt: null,
+            timerInterval: null,
+            refreshInterval: null,
+            qrInstance: null,
+            fullscreenQrInstance: null,
+            adminToken: null,
+            initialized: false
+        };
+
+        // ═══════════════════════════════════════════════════════════════
+        // INITIALIZATION
+        // ═══════════════════════════════════════════════════════════════
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            setupLoginListeners();
+
+            const savedToken = localStorage.getItem('cmastery_admin_token');
+            if (savedToken) {
+                state.adminToken = savedToken;
+                hideLoginOverlay();
+                initializeApp();
+            } else {
+                showLoginOverlay();
+            }
+        });
+
+        function initializeApp() {
+            if (state.initialized) return;
+            state.initialized = true;
+            populateDaySelect();
+            setupEventListeners();
+            updateDayInfo();
+            startAttendanceRefresh();
+        }
+
+        function populateDaySelect() {
+            const select = document.getElementById('daySelect');
+            for (let i = 1; i <= 65; i++) {
+                const option = document.createElement('option');
+                option.value = i;
+                option.textContent = `Day ${i}`;
+                select.appendChild(option);
+            }
+        }
+
+        function setupEventListeners() {
+            // Day selection
+            document.getElementById('daySelect').addEventListener('change', (e) => {
+                state.selectedDay = parseInt(e.target.value);
+                updateDayInfo();
+            });
+
+            // Expiry buttons
+            document.querySelectorAll('.expiry-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.expiry-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    state.expiryMinutes = parseInt(btn.dataset.minutes);
+                });
+            });
+
+            // Generate button
+            document.getElementById('generateBtn').addEventListener('click', generateQRCode);
+
+            // Action buttons
+            document.getElementById('fullscreenBtn').addEventListener('click', openFullscreen);
+            document.getElementById('copyCodeBtn').addEventListener('click', copyCode);
+            document.getElementById('refreshBtn').addEventListener('click', generateQRCode);
+
+            // Fullscreen close
+            document.getElementById('fullscreenClose').addEventListener('click', closeFullscreen);
+            
+            // ESC to close fullscreen
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') closeFullscreen();
+            });
+        }
+
+        function updateDayInfo() {
+            const topic = CONFIG.TOPICS[state.selectedDay - 1] || 'Unknown Topic';
+            document.getElementById('dayTopic').textContent = topic;
+            document.getElementById('dayDate').textContent = `Day ${state.selectedDay} of 65`;
+        }
+
+        // ═══════════════════════════════════════════════════════════════
+        // ADMIN LOGIN
+        // ═══════════════════════════════════════════════════════════════
+
+        function setupLoginListeners() {
+            const loginBtn = document.getElementById('loginBtn');
+            if (!loginBtn) return;
+
+            loginBtn.addEventListener('click', handleLogin);
+
+            const passwordInput = document.getElementById('adminPassword');
+            if (passwordInput) {
+                passwordInput.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') {
+                        handleLogin();
+                    }
+                });
+            }
+        }
+
+        async function handleLogin() {
+            const usernameInput = document.getElementById('adminUsername');
+            const passwordInput = document.getElementById('adminPassword');
+            const errorEl = document.getElementById('loginError');
+            const btn = document.getElementById('loginBtn');
+
+            const username = usernameInput.value.trim();
+            const password = passwordInput.value;
+
+            if (!username || !password) {
+                errorEl.textContent = 'Please enter username and password.';
+                errorEl.classList.add('show');
+                return;
+            }
+
+            errorEl.textContent = '';
+            errorEl.classList.remove('show');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="loading"></span> Logging in...';
+
+            try {
+                const response = await fetch(CONFIG.API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: 'adminLogin',
+                        username,
+                        password
+                    })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    state.adminToken = result.data.token;
+                    localStorage.setItem('cmastery_admin_token', state.adminToken);
+                    hideLoginOverlay();
+
+                    if (!state.initialized) {
+                        initializeApp();
+                    } else if (!state.refreshInterval) {
+                        startAttendanceRefresh();
+                    }
+                } else {
+                    errorEl.textContent = result.message || 'Login failed';
+                    errorEl.classList.add('show');
+                }
+            } catch (err) {
+                console.error('Login error:', err);
+                errorEl.textContent = 'Could not log in. Please try again.';
+                errorEl.classList.add('show');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '🔐 Login as Instructor';
+            }
+        }
+
+        function showLoginOverlay(message) {
+            const overlay = document.getElementById('loginOverlay');
+            const errorEl = document.getElementById('loginError');
+            if (message) {
+                errorEl.textContent = message;
+                errorEl.classList.add('show');
+            }
+            overlay.classList.remove('hidden');
+        }
+
+        function hideLoginOverlay() {
+            const overlay = document.getElementById('loginOverlay');
+            const errorEl = document.getElementById('loginError');
+            overlay.classList.add('hidden');
+            errorEl.textContent = '';
+            errorEl.classList.remove('show');
+        }
+
+        // ═══════════════════════════════════════════════════════════════
+        // QR CODE GENERATION
+        // ═══════════════════════════════════════════════════════════════
+        
+        async function generateQRCode() {
+            const btn = document.getElementById('generateBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="loading"></span> Generating...';
+
+            try {
+                // Call API to generate code using GET (CORS-friendly)
+                const url = `${CONFIG.API_URL}?action=generateCode&day=${state.selectedDay}&expiryMinutes=${state.expiryMinutes}&adminToken=${encodeURIComponent(state.adminToken || '')}`;
+                const response = await fetch(url);
+
+                const result = await response.json();
+
+                if (!result.success && result.data && result.data.status === 'Unauthorized') {
+                    showLoginOverlay('Session expired. Please log in again.');
+                    btn.disabled = false;
+                    btn.innerHTML = '🔄 Generate New QR Code';
+                    return;
+                }
+
+                if (result.success) {
+                    state.currentCode = result.data.code;
+                    state.expiresAt = new Date(result.data.expiresAt);
+                    
+                    displayQRCode();
+                    startTimer();
+                    showStatus('success', `QR Code generated! Valid for ${state.expiryMinutes} minutes.`);
+
+                    // While a code is active, prevent generating another
+                    // from the main button; use "Regenerate" instead.
+                    btn.disabled = true;
+                    btn.innerHTML = '🔒 Active code running...';
+                } else {
+                    showStatus('error', result.message || 'Failed to generate code');
+                    btn.disabled = false;
+                    btn.innerHTML = '🔄 Generate New QR Code';
+                }
+            } catch (error) {
+                console.error('Error generating QR code:', error);
+                showStatus('error', 'Could not generate QR code. Please check your internet connection or try again.');
+
+                btn.disabled = false;
+                btn.innerHTML = '🔄 Generate New QR Code';
+            }
+        }
+
+        function displayQRCode() {
+            // Build QR URL
+            const qrData = `${CONFIG.ATTENDANCE_URL}?day=${state.selectedDay}&code=${state.currentCode}&exp=${state.expiresAt.getTime()}`;
+
+            // Hide placeholder, show QR
+            document.getElementById('qrPlaceholder').style.display = 'none';
+            document.getElementById('qrCode').style.display = 'flex';
+            document.getElementById('timerContainer').style.display = 'block';
+            document.getElementById('backupContainer').style.display = 'block';
+            document.getElementById('qrActions').style.display = 'flex';
+
+            // Generate QR
+            const qrContainer = document.getElementById('qrCode');
+            qrContainer.innerHTML = '';
+            state.qrInstance = new QRCode(qrContainer, {
+                text: qrData,
+                width: 218,
+                height: 218,
+                colorDark: '#000000',
+                colorLight: '#ffffff',
+                correctLevel: QRCode.CorrectLevel.M
+            });
+
+            // Update backup code
+            document.getElementById('backupCode').textContent = state.currentCode;
+
+            // Update fullscreen
+            document.getElementById('fullscreenDay').textContent = 
+                `Day ${state.selectedDay}: ${CONFIG.TOPICS[state.selectedDay - 1]}`;
+            document.getElementById('fullscreenCode').textContent = state.currentCode;
+
+            // Generate fullscreen QR
+            const fullscreenQR = document.getElementById('fullscreenQR');
+            fullscreenQR.innerHTML = '';
+            state.fullscreenQrInstance = new QRCode(fullscreenQR, {
+                text: qrData,
+                width: 352,
+                height: 352,
+                colorDark: '#000000',
+                colorLight: '#ffffff',
+                correctLevel: QRCode.CorrectLevel.M
+            });
+        }
+
+        // ═══════════════════════════════════════════════════════════════
+        // TIMER
+        // ═══════════════════════════════════════════════════════════════
+        
+        function startTimer() {
+            // Clear existing timer
+            if (state.timerInterval) {
+                clearInterval(state.timerInterval);
+            }
+
+            updateTimerDisplay();
+            state.timerInterval = setInterval(updateTimerDisplay, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const now = new Date();
+            const remaining = state.expiresAt - now;
+
+            if (remaining <= 0) {
+                document.getElementById('timer').textContent = 'EXPIRED';
+                document.getElementById('timer').classList.add('expired');
+                document.getElementById('fullscreenTimer').textContent = 'Code Expired - Generate New';
+                clearInterval(state.timerInterval);
+
+                // Re-enable main generate button once code has expired
+                const btn = document.getElementById('generateBtn');
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerHTML = '🔄 Generate New QR Code';
+                }
+                return;
+            }
+
+            const minutes = Math.floor(remaining / 60000);
+            const seconds = Math.floor((remaining % 60000) / 1000);
+            const timeStr = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+            document.getElementById('timer').textContent = timeStr;
+            document.getElementById('timer').classList.remove('expired');
+            document.getElementById('fullscreenTimer').textContent = `Expires in: ${timeStr}`;
+        }
+
+        // ═══════════════════════════════════════════════════════════════
+        // ATTENDANCE REFRESH
+        // ═══════════════════════════════════════════════════════════════
+        
+        function startAttendanceRefresh() {
+            refreshAttendance();
+            state.refreshInterval = setInterval(refreshAttendance, CONFIG.REFRESH_INTERVAL);
+        }
+
+        async function refreshAttendance() {
+            try {
+                const response = await fetch(
+                    `${CONFIG.API_URL}?action=getDailyAttendance&day=${state.selectedDay}&adminToken=${encodeURIComponent(state.adminToken || '')}`
+                );
+                const result = await response.json();
+
+                if (!result.success && result.data && result.data.status === 'Unauthorized') {
+                    console.warn('Admin token invalid or expired');
+                    if (state.refreshInterval) {
+                        clearInterval(state.refreshInterval);
+                        state.refreshInterval = null;
+                    }
+                    showLoginOverlay('Session expired. Please log in again.');
+                    return;
+                }
+
+                if (result.success) {
+                    updateAttendanceDisplay(result.data);
+                }
+            } catch (error) {
+                console.error('Error refreshing attendance:', error);
+            }
+        }
+
+        function updateAttendanceDisplay(data) {
+            const count = data.count || 0;
+            const total = CONFIG.TOTAL_STUDENTS;
+            const percent = Math.round((count / total) * 100);
+
+            document.getElementById('attendanceCount').textContent = count;
+            document.getElementById('totalStudents').textContent = total;
+            document.getElementById('attendanceBar').style.width = `${percent}%`;
+
+            // Update list
+            const listContainer = document.getElementById('attendanceList');
+            if (data.students && data.students.length > 0) {
+                listContainer.innerHTML = data.students.slice(-5).reverse().map(s => `
+                    <div class="attendance-item">
+                        <span class="attendance-item-name">${s.studentName}</span>
+                        <span class="attendance-item-time">${new Date(s.timestamp).toLocaleTimeString()}</span>
+                    </div>
+                `).join('');
+            } else {
+                listContainer.innerHTML = `
+                    <div class="attendance-item" style="color: var(--text-muted); justify-content: center;">
+                        No attendance yet
+                    </div>
+                `;
+            }
+        }
+
+        // ═══════════════════════════════════════════════════════════════
+        // ACTIONS
+        // ═══════════════════════════════════════════════════════════════
+        
+        function openFullscreen() {
+            document.getElementById('fullscreenModal').classList.add('active');
+        }
+
+        function closeFullscreen() {
+            document.getElementById('fullscreenModal').classList.remove('active');
+        }
+
+        function copyCode() {
+            navigator.clipboard.writeText(state.currentCode).then(() => {
+                showStatus('success', 'Code copied to clipboard!');
+            }).catch(() => {
+                showStatus('error', 'Failed to copy code');
+            });
+        }
+
+        function showStatus(type, message) {
+            const el = document.getElementById('statusMessage');
+            el.textContent = message;
+            el.className = 'status-message ' + type;
+            setTimeout(() => {
+                el.className = 'status-message';
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
