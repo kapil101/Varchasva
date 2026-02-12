@@ -3,7 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>65-Day C Programming Mastery | Live Online Batch</title>
+    <title data-config="pageTitle">Varchasva C Mastery – 65-Day Live C Programming Course</title>
+    <meta name="description" content="Varchasva C Mastery is a 65-day live online C programming course with 65 interactive classes, real projects, and mentorship by Kapilesh Pujari. Ideal for beginners, students and freshers." />
+    <meta name="robots" content="index, follow" />
+    <meta name="author" content="Kapilesh Pujari" />
+    <link rel="canonical" href="https://kapil101.github.io/Varchasva/" />
+    <meta property="og:title" content="Varchasva C Mastery – 65-Day Live C Programming Course" />
+    <meta property="og:description" content="Live online C programming course with daily classes, projects and guidance from an industry expert. Start from zero and become job-ready in C." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://kapil101.github.io/Varchasva/" />
+    <meta property="og:site_name" content="Varchasva C Mastery" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="google-site-verification" content="qfkZWzxjpSs5SNqXt6PvUnKumLZ9RAsf69v-2EJO4B0" />
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -134,7 +145,8 @@
         .instructor { padding: var(--section-padding) 0; background: var(--bg-secondary); }
         .instructor-header { text-align: center; margin-bottom: 60px; }
         .instructor-content { display: grid; grid-template-columns: 350px 1fr; gap: 60px; align-items: start; }
-        .instructor-photo { width: 100%; aspect-ratio: 1; background: var(--gradient-primary); border-radius: 24px; display: flex; align-items: center; justify-content: center; font-size: 8rem; }
+        .instructor-photo { width: 100%; aspect-ratio: 1; background: var(--gradient-primary); border-radius: 24px; display: flex; align-items: center; justify-content: center; font-size: 8rem; overflow: hidden; }
+        .instructor-photo img { width: 100%; height: 100%; object-fit: cover; border-radius: 24px; }
         .instructor-social { display: flex; gap: 12px; margin-top: 20px; justify-content: center; }
         .instructor-social a { width: 48px; height: 48px; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--text-secondary); text-decoration: none; transition: all 0.3s; }
         .instructor-social a:hover { background: var(--accent-cyan); color: var(--bg-primary); }
@@ -252,7 +264,8 @@
         .plan-option.popular::before { content: '🔥 Popular'; position: absolute; top: -10px; left: 50%; transform: translateX(-50%); background: var(--gradient-primary); padding: 4px 12px; border-radius: 12px; font-size: 0.7rem; font-weight: 700; color: var(--bg-primary); }
         .plan-option-name { font-weight: 700; font-size: 1.1rem; margin-bottom: 4px; }
         .plan-option-price { font-size: 1.25rem; font-weight: 800; color: var(--accent-cyan); }
-        .plan-option-price span { font-size: 0.85rem; color: var(--text-muted); text-decoration: line-through; margin-left: 8px; font-weight: 400; }
+        .plan-option-price span:first-child { font-size: 1.25rem; font-weight: 800; color: var(--accent-cyan); }
+        .plan-option-price span:last-child { font-size: 0.85rem; color: var(--text-muted); text-decoration: line-through; margin-left: 8px; font-weight: 400; }
         
         /* Form Styles */
         .form-group { margin-bottom: 20px; }
@@ -328,6 +341,7 @@
             .hero-right { max-width: 450px; margin: 0 auto; }
             .instructor-content { grid-template-columns: 1fr; }
             .instructor-image { max-width: 300px; margin: 0 auto; }
+            .instructor-photo img { width: 200px; height: 200px; }
             .schedule-content { grid-template-columns: 1fr; }
         }
         @media (max-width: 768px) {
@@ -355,7 +369,7 @@
     <!-- Navigation -->
     <nav class="nav">
         <div class="container nav-container">
-            <a href="#" class="nav-logo"><span class="nav-logo-icon">C</span><span>C Mastery</span></a>
+            <a href="#" class="nav-logo"><span class="nav-logo-icon">C</span><span data-config="courseName"></span></a>
             <ul class="nav-links">
                 <li><a href="#schedule">Schedule</a></li>
                 <li><a href="#curriculum">Curriculum</a></li>
@@ -386,7 +400,7 @@
             <div class="hero-content">
                 <div class="hero-left">
                     <div class="hero-badge"><span class="hero-badge-dot"></span>Limited Seats • Batch Filling Fast</div>
-                    <h1 class="hero-title">Master C Programming in <span class="gradient-text">65 Days</span> with Live Classes</h1>
+                    <h1 class="hero-title">Master <span data-config="courseSubject"></span> in <span class="gradient-text" data-config="durationDays"></span> with Live Classes</h1>
                     <p class="hero-subtitle">Join our intensive live online batch and transform from complete beginner to professional C developer. Learn with real-time interaction, instant doubt clearing, and personalized mentorship.</p>
                     <div class="hero-highlights">
                         <div class="hero-highlight"><span>🎯</span><span>Live Interactive Classes</span></div>
@@ -403,7 +417,7 @@
                     <div class="batch-card">
                         <div class="batch-card-header">
                             <span class="batch-label">🔥 NEXT BATCH</span>
-                            <div class="batch-date" data-config="batchStartDate">February 15, 2025</div>
+                            <div class="batch-date" data-config="batchStartDate"></div>
                         </div>
                         <div class="countdown-container">
                             <div class="countdown-label">Enrollment closes in:</div>
@@ -415,29 +429,29 @@
                             </div>
                         </div>
                         <div class="batch-info">
-                            <div class="batch-info-item"><span class="batch-info-label">Duration</span><span class="batch-info-value" data-config="duration">65 Days (13 Weeks)</span></div>
-                            <div class="batch-info-item"><span class="batch-info-label">Timings</span><span class="batch-info-value" data-config="classTime">7:00 PM - 9:00 PM IST</span></div>
-                            <div class="batch-info-item"><span class="batch-info-label">Seats Available</span><span class="batch-info-value seats-indicator"><span class="seats-dot"></span><span data-config="seatsLeft">12 of 30 left</span></span></div>
+                            <div class="batch-info-item"><span class="batch-info-label">Duration</span><span class="batch-info-value" data-config="duration"></span></div>
+                            <div class="batch-info-item"><span class="batch-info-label">Timings</span><span class="batch-info-value" data-config="classTime"></span></div>
+                            <div class="batch-info-item"><span class="batch-info-label">Seats Available</span><span class="batch-info-value seats-indicator"><span class="seats-dot"></span><span data-config="seatsLeft"></span></span></div>
                         </div>
                         <button type="button" class="batch-cta" onclick="document.getElementById('enrollModal').classList.add('active'); document.body.style.overflow='hidden';">Reserve Your Seat →</button>
-                        <p class="batch-guarantee">✓ 7-Day Money-Back Guarantee</p>
+                        <p class="batch-guarantee">✓ <span data-config="refundDays"></span>-Day Money-Back Guarantee</p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Stats Bar -->
+    <!-- Stats Bar 
     <section class="stats-bar">
         <div class="container">
             <div class="stats-grid">
-                <div class="stat-item reveal"><div class="stat-value">500+</div><div class="stat-label">Students Trained</div></div>
-                <div class="stat-item reveal"><div class="stat-value">4.9/5</div><div class="stat-label">Average Rating</div></div>
-                <div class="stat-item reveal"><div class="stat-value">95%</div><div class="stat-label">Completion Rate</div></div>
-                <div class="stat-item reveal"><div class="stat-value">85%</div><div class="stat-label">Got Placed/Promoted</div></div>
+                <div class="stat-item reveal"><div class="stat-value" data-config="studentsTrained"></div><div class="stat-label">Students Trained</div></div>
+                <div class="stat-item reveal"><div class="stat-value" data-config="averageRating"></div><div class="stat-label">Average Rating</div></div>
+                <div class="stat-item reveal"><div class="stat-value" data-config="completionRate"></div><div class="stat-label">Completion Rate</div></div>
+                <div class="stat-item reveal"><div class="stat-value" data-config="placementRate"></div><div class="stat-label">Got Placed/Promoted</div></div>
             </div>
         </div>
-    </section>
+    </section> -->
 
     <!-- Live Benefits -->
     <section class="live-benefits" id="benefits">
@@ -469,10 +483,10 @@
                 <div class="schedule-card reveal">
                     <h3 class="schedule-card-title"><span class="schedule-card-icon">🕐</span>Class Timings</h3>
                     <ul class="schedule-list">
-                        <li><span class="schedule-list-label">Days</span><span class="schedule-list-value" data-config="classDays">Monday to Friday</span></li>
-                        <li><span class="schedule-list-label">Time</span><span class="schedule-list-value" data-config="classTime">7:00 PM - 9:00 PM IST</span></li>
-                        <li><span class="schedule-list-label">Duration</span><span class="schedule-list-value" data-config="classDuration">2 Hours / Day</span></li>
-                        <li><span class="schedule-list-label">Total Sessions</span><span class="schedule-list-value" data-config="totalSessions">65 Live Classes</span></li>
+                        <li><span class="schedule-list-label">Days</span><span class="schedule-list-value" data-config="classDays"></span></li>
+                        <li><span class="schedule-list-label">Time</span><span class="schedule-list-value" data-config="classTime"></span></li>
+                        <li><span class="schedule-list-label">Duration</span><span class="schedule-list-value" data-config="classDuration"></span></li>
+                        <li><span class="schedule-list-label">Total Sessions</span><span class="schedule-list-value" data-config="totalSessions"></span></li>
                         <li><span class="schedule-list-label">Weekend</span><span class="schedule-list-value">Practice & Assignments</span></li>
                     </ul>
                     <div class="timezone-note">⏰ All timings in IST. Recordings available if you miss a class.</div>
@@ -480,11 +494,11 @@
                 <div class="schedule-card reveal">
                     <h3 class="schedule-card-title"><span class="schedule-card-icon">📋</span>Batch Details</h3>
                     <ul class="schedule-list">
-                        <li><span class="schedule-list-label">Batch Start</span><span class="schedule-list-value" data-config="batchStartDate">February 15, 2025</span></li>
-                        <li><span class="schedule-list-label">Batch End</span><span class="schedule-list-value" data-config="batchEndDate">April 30, 2025</span></li>
-                        <li><span class="schedule-list-label">Total Duration</span><span class="schedule-list-value" data-config="durationWeeks">13 Weeks</span></li>
-                        <li><span class="schedule-list-label">Batch Size</span><span class="schedule-list-value" data-config="totalSeats">30 Students (Max)</span></li>
-                        <li><span class="schedule-list-label">Platform</span><span class="schedule-list-value">Zoom + Discord</span></li>
+                        <li><span class="schedule-list-label">Batch Start</span><span class="schedule-list-value" data-config="batchStartDate"></span></li>
+                        <li><span class="schedule-list-label">Batch End</span><span class="schedule-list-value" data-config="batchEndDate"></span></li>
+                        <li><span class="schedule-list-label">Total Duration</span><span class="schedule-list-value" data-config="durationWeeks"></span></li>
+                    <!-- <li><span class="schedule-list-label">Batch Size</span><span class="schedule-list-value" data-config="totalSeats"></span></li>-->
+                        <li><span class="schedule-list-label">Platform</span><span class="schedule-list-value">Zoom + Telegram</span></li>
                     </ul>
                 </div>
             </div>
@@ -496,7 +510,7 @@
         <div class="container">
             <div class="curriculum-header reveal">
                 <span class="section-badge">📚 Complete Curriculum</span>
-                <h2 class="section-title">Your 13-Week <span class="gradient-text">Journey</span></h2>
+                <h2 class="section-title">Your <span data-config="durationWeeks"></span> <span class="gradient-text">Journey</span></h2>
             </div>
             <div class="curriculum-grid">
                 <div class="curriculum-card reveal"><div class="curriculum-card-header"><span class="curriculum-week-badge">Week 1-2</span><h3 class="curriculum-card-title">Fundamentals & Control Flow</h3></div><div class="curriculum-card-body"><p class="curriculum-topics">Variables, data types, operators, I/O, conditionals, loops.</p><div class="curriculum-days">Days 1-10 • 10 Sessions</div></div></div>
@@ -520,25 +534,27 @@
             </div>
             <div class="instructor-content">
                 <div class="instructor-image reveal">
-                    <div class="instructor-photo">👨‍💻</div>
+                    <div class="instructor-photo">
+                        <img src="IMG-20221102-WA0033.jpg" alt="Instructor Photo">
+                    </div>
                     <div class="instructor-social">
                         <a href="#">LI</a><a href="#">GH</a><a href="#">X</a>
                     </div>
                 </div>
                 <div class="instructor-info reveal">
-                    <h3>[Instructor Name]</h3>
-                    <p class="instructor-title">Senior Software Engineer & C Expert</p>
-                    <p class="instructor-bio">With 10+ years in systems programming, [Instructor Name] has trained 500+ students and helped them land jobs at top companies.</p>
+                    <h3>Kapilesh Pujari</h3>
+                    <p class="instructor-title">Technical Software Specialist & C/C++ Expert</p>
+                    <p class="instructor-bio">With 10+ years of hands-on experience in systems programming, embedded systems, and low-level development — including international stints in the US and Australia — Kapilesh brings real-world global industry expertise to the classroom. Now passionate about sharing this knowledge, he's committed to helping aspiring developers build a rock-solid foundation in C programming.</p>
                     <div class="instructor-stats">
                         <div class="instructor-stat"><div class="instructor-stat-value">10+</div><div class="instructor-stat-label">Years Exp</div></div>
-                        <div class="instructor-stat"><div class="instructor-stat-value">500+</div><div class="instructor-stat-label">Students</div></div>
-                        <div class="instructor-stat"><div class="instructor-stat-value">4.9</div><div class="instructor-stat-label">Rating</div></div>
+                        <div class="instructor-stat"><div class="instructor-stat-value">C/C++</div><div class="instructor-stat-label">Expert</div></div>
+                        <div class="instructor-stat"><div class="instructor-stat-value">🌏</div><div class="instructor-stat-label">Global Exp</div></div>
                     </div>
-                    <ul class="instructor-credentials">
+               <!-- <ul class="instructor-credentials">
                         <li><span class="credential-icon">✓</span><span>Senior Systems Engineer experience</span></li>
-                        <li><span class="credential-icon">✓</span><span>Open-source contributor with 1000+ stars</span></li>
+                        <li><span class="credential-icon">✓</span><span>Open-source contributor with 1000+ stars</span></li> 
                         <li><span class="credential-icon">✓</span><span>Published author on C programming</span></li>
-                    </ul>
+                    </ul>-->
                 </div>
             </div>
         </div>
@@ -552,18 +568,18 @@
                 <h2 class="section-title">Everything You <span class="gradient-text">Get</span></h2>
             </div>
             <div class="deliverables-grid">
-                <div class="deliverable-card reveal"><div class="deliverable-icon">🎥</div><div class="deliverable-content"><h4>65 Live Classes</h4><p>2-hour interactive sessions</p></div></div>
-                <div class="deliverable-card reveal"><div class="deliverable-icon">📹</div><div class="deliverable-content"><h4>Lifetime Recordings</h4><p>Access forever, watch anytime</p></div></div>
-                <div class="deliverable-card reveal"><div class="deliverable-icon">📚</div><div class="deliverable-content"><h4>Course Materials</h4><p>64 slides with 2500+ pages</p></div></div>
+                <div class="deliverable-card reveal"><div class="deliverable-icon">🎥</div><div class="deliverable-content"><h4><span data-config="totalSessions"></span></h4><p><span data-config="classDurationHours"></span>-hour interactive sessions</p></div></div>
+                <div class="deliverable-card reveal"><div class="deliverable-icon">📹</div><div class="deliverable-content"><h4>Recordings</h4><p>6-Month Access all class recordings</p></div></div>
+                <div class="deliverable-card reveal"><div class="deliverable-icon">📚</div><div class="deliverable-content"><h4>Course Materials</h4><p>6-Month Access all 64 slides with 2500+ pages</p></div></div>
                 <div class="deliverable-card reveal"><div class="deliverable-icon">💻</div><div class="deliverable-content"><h4>4 Real Projects</h4><p>Portfolio-worthy applications</p></div></div>
-                <div class="deliverable-card reveal"><div class="deliverable-icon">📜</div><div class="deliverable-content"><h4>Certificate</h4><p>Industry-recognized credential</p></div></div>
-                <div class="deliverable-card reveal"><div class="deliverable-icon">💬</div><div class="deliverable-content"><h4>Discord Community</h4><p>Lifetime access to network</p></div></div>
+                <div class="deliverable-card reveal"><div class="deliverable-icon">📜</div><div class="deliverable-content"><h4>Certificate</h4><p>Course completion certificate</p></div></div>
+                <div class="deliverable-card reveal"><div class="deliverable-icon">💬</div><div class="deliverable-content"><h4>Telegram Community</h4><p>6 months access to network</p></div></div>
                 <div class="deliverable-card reveal"><div class="deliverable-icon">🧠</div><div class="deliverable-content"><h4>200+ Problems</h4><p>Coding exercises with solutions</p></div></div>
-                <div class="deliverable-card reveal"><div class="deliverable-icon">🎯</div><div class="deliverable-content"><h4>1-on-1 Sessions</h4><p>Weekly personalized help</p></div></div>
+            <!-- <div class="deliverable-card reveal"><div class="deliverable-icon">🎯</div><div class="deliverable-content"><h4>1-on-1 Sessions</h4><p>Weekly personalized help</p></div></div>
                 <div class="deliverable-card reveal"><div class="deliverable-icon">📋</div><div class="deliverable-content"><h4>Interview Kit</h4><p>100+ questions answered</p></div></div>
                 <div class="deliverable-card reveal"><div class="deliverable-icon">💼</div><div class="deliverable-content"><h4>Job Assistance</h4><p>Resume & mock interviews</p></div></div>
                 <div class="deliverable-card reveal"><div class="deliverable-icon">📖</div><div class="deliverable-content"><h4>Cheat Sheets</h4><p>Quick reference guides</p></div></div>
-                <div class="deliverable-card reveal"><div class="deliverable-icon">🔄</div><div class="deliverable-content"><h4>Free Re-batch</h4><p>Join next batch if needed</p></div></div>
+                <div class="deliverable-card reveal"><div class="deliverable-icon">🔄</div><div class="deliverable-content"><h4>Free Re-batch</h4><p>Join next batch if needed</p></div></div>-->
             </div>
         </div>
     </section>
@@ -580,17 +596,17 @@
                     <h3 class="pricing-plan">Standard</h3>
                     <p class="pricing-description">Full course access with community support</p>
                     <div class="pricing-amount">
-                        <span class="pricing-currency">₹</span><span class="pricing-value">4,999</span><span class="pricing-original">₹9,999</span>
+                        <span class="pricing-currency">₹</span><span class="pricing-value" data-config="standardPriceValue"></span><span class="pricing-original" data-config="standardOriginal"></span>
                         <div class="pricing-period">One-time payment</div>
                     </div>
                     <ul class="pricing-features">
-                        <li><span class="pricing-check">✓</span>65 Live Interactive Classes</li>
-                        <li><span class="pricing-check">✓</span>Lifetime Recording Access</li>
+                        <li><span class="pricing-check">✓</span><span data-config="totalSessions"></span></li>
+                        <li><span class="pricing-check">✓</span>6-Month Recording Access</li>
                         <li><span class="pricing-check">✓</span>All Course Materials</li>
                         <li><span class="pricing-check">✓</span>4 Hands-on Projects</li>
-                        <li><span class="pricing-check">✓</span>Discord Community</li>
+                        <li><span class="pricing-check">✓</span>Telegram Community</li>
                         <li><span class="pricing-check">✓</span>Certificate of Completion</li>
-                        <li><span class="pricing-check">✓</span>7-Day Money-Back Guarantee</li>
+                        <li><span class="pricing-check">✓</span><span data-config="refundDays"></span>-Day Money-Back Guarantee</li>
                     </ul>
                     <button type="button" class="pricing-cta secondary" onclick="document.getElementById('enrollModal').classList.add('active'); document.body.style.overflow='hidden';">Get Started</button>
                 </div>
@@ -599,7 +615,7 @@
                     <h3 class="pricing-plan">Pro</h3>
                     <p class="pricing-description">Everything + personalized support</p>
                     <div class="pricing-amount">
-                        <span class="pricing-currency">₹</span><span class="pricing-value">7,999</span><span class="pricing-original">₹14,999</span>
+                        <span class="pricing-currency">₹</span><span class="pricing-value" data-config="proPriceValue"></span><span class="pricing-original" data-config="proOriginal"></span>
                         <div class="pricing-period">One-time payment</div>
                     </div>
                     <ul class="pricing-features">
@@ -609,7 +625,7 @@
                         <li><span class="pricing-check">✓</span>Interview Prep Kit</li>
                         <li><span class="pricing-check">✓</span>Resume Review</li>
                         <li><span class="pricing-check">✓</span>Mock Interviews</li>
-                        <li><span class="pricing-check">✓</span>Job Referrals</li>
+                    <!--    <li><span class="pricing-check">✓</span>Job Referrals</li> -->
                         <li><span class="pricing-check">✓</span>Free Re-batch Access</li>
                     </ul>
                     <button type="button" class="pricing-cta primary" onclick="document.getElementById('enrollModal').classList.add('active'); document.body.style.overflow='hidden';">Enroll Now →</button>
@@ -617,7 +633,7 @@
             </div>
             <div class="pricing-guarantee reveal">
                 <div class="pricing-guarantee-icon">🛡️</div>
-                <h4>7-Day Money-Back Guarantee</h4>
+                <h4><span data-config="refundDays"></span>-Day Money-Back Guarantee</h4>
                 <p>Try risk-free. Not satisfied? 100% refund, no questions asked.</p>
             </div>
         </div>
@@ -631,12 +647,12 @@
                 <h2 class="section-title">Frequently Asked <span class="gradient-text">Questions</span></h2>
             </div>
             <div class="faq-grid">
-                <div class="faq-item reveal"><button class="faq-question"><h3>What if I miss a live class?</h3><span class="faq-icon">+</span></button><div class="faq-answer"><p class="faq-answer-content">All sessions are recorded and uploaded within 2-3 hours. You'll have lifetime access to recordings.</p></div></div>
+                <div class="faq-item reveal"><button class="faq-question"><h3>What if I miss a live class?</h3><span class="faq-icon">+</span></button><div class="faq-answer"><p class="faq-answer-content">All sessions are recorded and uploaded within 2-3 hours. You'll have 6 months access to recordings.</p></div></div>
                 <div class="faq-item reveal"><button class="faq-question"><h3>I'm a complete beginner. Is this for me?</h3><span class="faq-icon">+</span></button><div class="faq-answer"><p class="faq-answer-content">Absolutely! We start from the very basics. No prior experience needed.</p></div></div>
-                <div class="faq-item reveal"><button class="faq-question"><h3>Will I get a certificate?</h3><span class="faq-icon">+</span></button><div class="faq-answer"><p class="faq-answer-content">Yes! Complete the course and receive an industry-recognized certificate.</p></div></div>
-                <div class="faq-item reveal"><button class="faq-question"><h3>What is the refund policy?</h3><span class="faq-icon">+</span></button><div class="faq-answer"><p class="faq-answer-content">7-day money-back guarantee. Full refund if not satisfied, no questions asked.</p></div></div>
-                <div class="faq-item reveal"><button class="faq-question"><h3>Can I pay in installments?</h3><span class="faq-icon">+</span></button><div class="faq-answer"><p class="faq-answer-content">Yes! EMI options available. Contact us on WhatsApp for details.</p></div></div>
-                <div class="faq-item reveal"><button class="faq-question"><h3>Will this help me get a job?</h3><span class="faq-icon">+</span></button><div class="faq-answer"><p class="faq-answer-content">Week 13 is dedicated to interview prep. Pro plan includes resume review, mock interviews, and job referrals.</p></div></div>
+                <div class="faq-item reveal"><button class="faq-question"><h3>Will I get a certificate?</h3><span class="faq-icon">+</span></button><div class="faq-answer"><p class="faq-answer-content">Yes! Complete the course and receive a course completion certificate you can add to your resume and LinkedIn.</p></div></div>
+                <div class="faq-item reveal"><button class="faq-question"><h3>What is the refund policy?</h3><span class="faq-icon">+</span></button><div class="faq-answer"><p class="faq-answer-content"><span data-config="refundDays"></span>-day money-back guarantee. Full refund if not satisfied, no questions asked.</p></div></div>
+                <!-- <div class="faq-item reveal"><button class="faq-question"><h3>Can I pay in installments?</h3><span class="faq-icon">+</span></button><div class="faq-answer"><p class="faq-answer-content">Yes! EMI options available. Contact us on WhatsApp for details.</p></div></div> -->
+                <div class="faq-item reveal"><button class="faq-question"><h3>Will this help me get a job?</h3><span class="faq-icon">+</span></button><div class="faq-answer"><p class="faq-answer-content">Week 13 is dedicated to interview preparation, including guidance on  Projects and common questions. This course will strengthen your fundamentals, but we do not provide direct job placement or referrals.</p></div></div>
             </div>
         </div>
     </section>
@@ -646,12 +662,12 @@
         <div class="container">
             <div class="cta-content reveal">
                 <h2 class="cta-title">Ready to <span class="gradient-text">Transform</span> Your Career?</h2>
-                <p class="cta-subtitle">Join 500+ students who landed their dream jobs.</p>
+                <p class="cta-subtitle">Take the first step towards becoming a professional C developer.</p>
                 <div class="cta-batch-info">
-                    <div class="cta-batch-item"><div class="cta-batch-label">Next Batch</div><div class="cta-batch-value" data-config="batchStartDateShort">Feb 15, 2025</div></div>
-                    <div class="cta-batch-item"><div class="cta-batch-label">Duration</div><div class="cta-batch-value" data-config="durationDays">65 Days</div></div>
-                    <div class="cta-batch-item"><div class="cta-batch-label">Seats Left</div><div class="cta-batch-value" data-config="seatsLeftShort">12 of 30</div></div>
-                    <div class="cta-batch-item"><div class="cta-batch-label">Starts From</div><div class="cta-batch-value" data-config="startingPrice">₹4,999</div></div>
+                    <div class="cta-batch-item"><div class="cta-batch-label">Next Batch</div><div class="cta-batch-value" data-config="batchStartDateShort"></div></div>
+                    <div class="cta-batch-item"><div class="cta-batch-label">Duration</div><div class="cta-batch-value" data-config="durationDays"></div></div>
+                    <div class="cta-batch-item"><div class="cta-batch-label">Seats Left</div><div class="cta-batch-value" data-config="seatsLeftShort"></div></div>
+                    <div class="cta-batch-item"><div class="cta-batch-label">Starts From</div><div class="cta-batch-value" data-config="startingPrice"></div></div>
                 </div>
                 <div class="cta-buttons">
                     <button type="button" class="btn-primary" onclick="document.getElementById('enrollModal').classList.add('active'); document.body.style.overflow='hidden';">🚀 Enroll Now</button>
@@ -666,16 +682,16 @@
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-brand">
-                    <div class="footer-logo"><span class="footer-logo-icon">C</span><span data-config="courseName">C Mastery</span></div>
-                    <p class="footer-description">Transform from beginner to professional C developer in 65 days.</p>
-                    <p>📧 <a href="mailto:hello@cmastery.com" data-config="email">hello@cmastery.com</a><br>📱 <a href="#" data-config="whatsappLink"><span data-config="whatsappDisplay">+91 98765 43210</span></a></p>
+                    <div class="footer-logo"><span class="footer-logo-icon">C</span><span data-config="courseName"></span></div>
+                    <p class="footer-description">Transform from beginner to professional C developer in <span data-config="durationDays"></span>.</p>
+                    <p>📧 <a href="mailto:hello@cmastery.com" data-config="email"></a><br>📱 <a href="#" data-config="whatsappLink"><span data-config="whatsappDisplay"></span></a></p>
                 </div>
                 <div class="footer-column"><h4>Course</h4><ul class="footer-links"><li><a href="#curriculum">Curriculum</a></li><li><a href="#schedule">Schedule</a></li><li><a href="#pricing">Pricing</a></li></ul></div>
                 <div class="footer-column"><h4>Resources</h4><ul class="footer-links"><li><a href="#">Free Cheatsheet</a></li><li><a href="#">Blog</a></li><li><a href="#">YouTube</a></li></ul></div>
                 <div class="footer-column"><h4>Support</h4><ul class="footer-links"><li><a href="#faq">FAQ</a></li><li><a href="#">Contact</a></li><li><a href="#">Refund Policy</a></li></ul></div>
             </div>
             <div class="footer-bottom">
-                <p class="footer-copyright" data-config="copyright">© 2025 C Mastery. All rights reserved.</p>
+                <p class="footer-copyright" data-config="copyright"></p>
                 <div class="footer-social"><a href="#">YT</a><a href="#">LI</a><a href="#">IG</a><a href="#">X</a></div>
             </div>
         </div>
@@ -686,7 +702,7 @@
         <div class="modal">
             <button class="modal-close" id="modalClose">×</button>
             <div class="modal-header">
-                <h2>🚀 Enroll in C Mastery</h2>
+                <h2>🚀 Enroll in <span data-config="courseName"></span></h2>
                 <p>Fill the form below to reserve your seat</p>
             </div>
             <div class="modal-body">
@@ -695,13 +711,13 @@
                     <div class="form-group">
                         <label class="form-label">Select Your Plan <span>*</span></label>
                         <div class="plan-selector">
-                            <div class="plan-option" data-plan="standard" data-price="4999">
+                            <div class="plan-option" data-plan="standard">
                                 <div class="plan-option-name">Standard</div>
-                                <div class="plan-option-price">₹4,999 <span>₹9,999</span></div>
+                                <div class="plan-option-price"><span data-config="standardPrice"></span> <span data-config="standardOriginal"></span></div>
                             </div>
-                            <div class="plan-option popular selected" data-plan="pro" data-price="7999">
+                            <div class="plan-option popular selected" data-plan="pro">
                                 <div class="plan-option-name">Pro</div>
-                                <div class="plan-option-price">₹7,999 <span>₹14,999</span></div>
+                                <div class="plan-option-price"><span data-config="proPrice"></span> <span data-config="proOriginal"></span></div>
                             </div>
                         </div>
                     </div>
@@ -771,33 +787,32 @@
                         </select>
                     </div>
 
-                    <!-- Coupon Code -->
+                    <!-- Coupon Code - DISABLED FOR NOW
                     <div class="form-group">
                         <label class="form-label">Coupon Code (If any)</label>
                         <div class="coupon-group">
                             <input type="text" class="form-input" id="coupon" placeholder="Enter coupon code">
                             <button type="button" class="coupon-btn" id="applyCoupon">Apply</button>
                         </div>
-                        <div class="coupon-success" id="couponSuccess">✓ Coupon applied! You saved ₹500</div>
+                        <div class="coupon-success" id="couponSuccess"></div>
                     </div>
+                    -->
 
                     <!-- Price Summary -->
                     <div class="price-summary">
                         <div class="price-row">
                             <span>Course Fee</span>
-                            <span><span class="original" id="originalPrice">₹14,999</span> <span id="discountedPrice">₹7,999</span></span>
+                            <span><span class="original" id="originalPrice"></span> <span id="discountedPrice"></span></span>
                         </div>
+                        <!-- Coupon Discount - DISABLED FOR NOW
                         <div class="price-row discount" id="couponDiscount" style="display: none;">
                             <span>Coupon Discount</span>
-                            <span>- ₹500</span>
+                            <span></span>
                         </div>
-                        <div class="price-row">
-                            <span>GST (18%)</span>
-                            <span id="gstAmount">₹1,440</span>
-                        </div>
+                        -->
                         <div class="price-row">
                             <span>Total Amount</span>
-                            <span id="totalAmount">₹9,439</span>
+                            <span id="totalAmount"></span>
                         </div>
                     </div>
 
@@ -813,7 +828,7 @@
                     <!-- Trust Badges -->
                     <div class="trust-badges">
                         <div class="trust-badge">🔒 Secure & Private</div>
-                        <div class="trust-badge">🛡️ 7-Day Refund</div>
+                        <div class="trust-badge">🛡️ <span data-config="refundDays"></span> -  Day Refund</div>
                         <div class="trust-badge">💬 Personal Support</div>
                     </div>
                 </form>
@@ -827,22 +842,30 @@
         // ============================================================
         const CONFIG = {
             // Course Info
-            courseName: 'C Mastery',
+            courseName: 'Varchasva C Mastery',
             courseSubject: 'C Programming',
             courseDurationDays: 65,
             courseDurationWeeks: 13,
             totalSessions: 65,
             
+            // Stats (displayed on page)
+            stats: {
+                studentsTrained: '500+',
+                averageRating: '4.9/5',
+                completionRate: '95%',
+                placementRate: '85%'
+            },
+            
             // Batch Details
-            batchStartDate: 'February 15, 2025',
-            batchStartDateShort: 'Feb 15, 2025',
-            batchEndDate: 'April 30, 2025',
-            enrollmentDeadline: '2025-02-10T23:59:59',
+            batchStartDate: 'February 15, 2026',
+            batchStartDateShort: 'Feb 15, 2026',
+            batchEndDate: 'April 30, 2026',
+            enrollmentDeadline: '2026-02-10T23:59:59',
             
             // Class Timings
-            classTime: '7:00 PM - 9:00 PM IST',
+            classTime: '7:00 PM - 8:00 PM IST',
             classDays: 'Monday to Friday',
-            classDurationHours: 2,
+            classDurationHours: 1,
             
             // Seats
             totalSeats: 30,
@@ -850,12 +873,12 @@
             
             // Contact Info
             whatsappNumber: '919096992790',  // Format: country code + number (no +)
-            whatsappDisplay: '+91 90969 992790',
+            whatsappDisplay: '+91 90969 92790',
             email: 'hello@cmastery.com',
             
             // Pricing (in INR)
             pricing: {
-                standard: { price: 4999, original: 9999 },
+                standard: { price: 3499, original: 8499 },
                 pro: { price: 7999, original: 14999 }
             },
             
@@ -877,7 +900,10 @@
             },
             
             // Copyright Year
-            copyrightYear: 2025
+            copyrightYear: 2026,
+            
+            // Refund Policy
+            refundDays: 5
         };
         // ============================================================
 
@@ -921,14 +947,41 @@
                 el.href = getWhatsAppURL(`Hi! I have a question about ${CONFIG.courseName} course.`);
             });
             
-            // Course Name
+            // Course Name & Subject
             document.querySelectorAll('[data-config="courseName"]').forEach(el => el.textContent = CONFIG.courseName);
+            document.querySelectorAll('[data-config="courseSubject"]').forEach(el => el.textContent = CONFIG.courseSubject);
             
-            // Pricing
+            // Page Title
+            document.querySelectorAll('[data-config="pageTitle"]').forEach(el => el.textContent = `${CONFIG.courseDurationDays}-Day ${CONFIG.courseSubject} Mastery | Live Online Batch`);
+            
+            // Class Duration Hours
+            document.querySelectorAll('[data-config="classDurationHours"]').forEach(el => el.textContent = CONFIG.classDurationHours);
+            
+            // Pricing - Starting Price
             document.querySelectorAll('[data-config="startingPrice"]').forEach(el => el.textContent = `₹${CONFIG.pricing.standard.price.toLocaleString('en-IN')}`);
+            
+            // Pricing Cards - Standard
+            document.querySelectorAll('[data-config="standardPrice"]').forEach(el => el.textContent = `₹${CONFIG.pricing.standard.price.toLocaleString('en-IN')}`);
+            document.querySelectorAll('[data-config="standardPriceValue"]').forEach(el => el.textContent = CONFIG.pricing.standard.price.toLocaleString('en-IN'));
+            document.querySelectorAll('[data-config="standardOriginal"]').forEach(el => el.textContent = `₹${CONFIG.pricing.standard.original.toLocaleString('en-IN')}`);
+            
+            // Pricing Cards - Pro
+            document.querySelectorAll('[data-config="proPrice"]').forEach(el => el.textContent = `₹${CONFIG.pricing.pro.price.toLocaleString('en-IN')}`);
+            document.querySelectorAll('[data-config="proPriceValue"]').forEach(el => el.textContent = CONFIG.pricing.pro.price.toLocaleString('en-IN'));
+            document.querySelectorAll('[data-config="proOriginal"]').forEach(el => el.textContent = `₹${CONFIG.pricing.pro.original.toLocaleString('en-IN')}`);
+            
+            // Stats
+            document.querySelectorAll('[data-config="studentsTrained"]').forEach(el => el.textContent = CONFIG.stats.studentsTrained);
+            document.querySelectorAll('[data-config="averageRating"]').forEach(el => el.textContent = CONFIG.stats.averageRating);
+            document.querySelectorAll('[data-config="completionRate"]').forEach(el => el.textContent = CONFIG.stats.completionRate);
+            document.querySelectorAll('[data-config="placementRate"]').forEach(el => el.textContent = CONFIG.stats.placementRate);
+            document.querySelectorAll('[data-config="ratingValue"]').forEach(el => el.textContent = CONFIG.stats.averageRating.split('/')[0]);
             
             // Copyright
             document.querySelectorAll('[data-config="copyright"]').forEach(el => el.textContent = `© ${CONFIG.copyrightYear} ${CONFIG.courseName}. All rights reserved.`);
+            
+            // Refund Days
+            document.querySelectorAll('[data-config="refundDays"]').forEach(el => el.textContent = CONFIG.refundDays);
         }
 
         // Run on DOM load
@@ -1034,12 +1087,10 @@
             const original = plan.original;
             const discount = couponApplied ? couponDiscount : 0;
             const priceAfterCoupon = basePrice - discount;
-            const gst = Math.round(priceAfterCoupon * 0.18);
-            const total = priceAfterCoupon + gst;
+            const total = priceAfterCoupon;
 
             document.getElementById('originalPrice').textContent = '₹' + original.toLocaleString('en-IN');
             document.getElementById('discountedPrice').textContent = '₹' + basePrice.toLocaleString('en-IN');
-            document.getElementById('gstAmount').textContent = '₹' + gst.toLocaleString('en-IN');
             document.getElementById('totalAmount').textContent = '₹' + total.toLocaleString('en-IN');
             
             const couponRow = document.getElementById('couponDiscount');
@@ -1051,7 +1102,7 @@
             }
         }
 
-        // Apply coupon
+        /* Apply coupon - DISABLED FOR NOW
         document.getElementById('applyCoupon').addEventListener('click', function() {
             const couponCode = document.getElementById('coupon').value.trim().toUpperCase();
             
@@ -1076,6 +1127,7 @@
                 alert('Invalid coupon code. Please try again.');
             }
         });
+        */
 
         // Phone number validation (only digits)
         document.getElementById('phone').addEventListener('input', function() {
@@ -1107,8 +1159,7 @@
             const planName = selectedPlan.charAt(0).toUpperCase() + selectedPlan.slice(1);
             const discount = couponApplied ? couponDiscount : 0;
             const priceAfterCoupon = plan.price - discount;
-            const gst = Math.round(priceAfterCoupon * 0.18);
-            const total = priceAfterCoupon + gst;
+            const total = priceAfterCoupon;
 
             // Get optional fields
             const organization = document.getElementById('organization').value.trim();
@@ -1143,7 +1194,6 @@
             message += `📦 Plan: ${planName}\n`;
             message += `💵 Fee: ₹${plan.price.toLocaleString('en-IN')}\n`;
             if (couponApplied) message += `🏷️ Coupon (${coupon}): -₹${discount.toLocaleString('en-IN')}\n`;
-            message += `📊 GST (18%): ₹${gst.toLocaleString('en-IN')}\n`;
             message += `✅ *Total: ₹${total.toLocaleString('en-IN')}*\n`;
             message += `\n`;
             message += `Please share payment details. 🙏`;
