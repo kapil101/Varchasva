@@ -1055,7 +1055,7 @@
                 clearInterval(state.timerInterval);
             }
 
-            // Update "View Dashboard" link to include this student's roll number
+            // Update "View Dashboard" link to include this student's roll number and day
             const roll = document.getElementById('rollNumber').value.trim().toUpperCase();
             const dashboardLink = document.getElementById('viewDashboardLink');
             if (dashboardLink && roll) {
@@ -1063,9 +1063,12 @@
                 const url = new URL(window.location.href);
                 // Replace current file (e.g., attendance.html) with student.html
                 url.pathname = url.pathname.replace(/[^/]+$/, 'student.html');
-                // Reset query and add roll parameter
+                // Reset query and add parameters
                 url.search = '';
                 url.searchParams.set('roll', roll);
+                if (state.day) {
+                    url.searchParams.set('day', state.day);
+                }
                 dashboardLink.href = url.toString();
             }
         }

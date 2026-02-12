@@ -885,6 +885,10 @@
         
         let state = {
             rollNumber: null,
+            // If a specific day is passed via URL (e.g., from attendance.html),
+            // we use it to drive "Today's Class"; otherwise we fall back to
+            // the backend-reported currentDay.
+            overrideDay: null,
             currentDay: 1,
             attendance: {
                 total: 0,
@@ -911,9 +915,16 @@
             const params = new URLSearchParams(window.location.search);
             const urlRoll = (params.get('roll') || '').trim().toUpperCase();
             const urlAdmin = (params.get('admin') || '').trim();
+            const urlDay = parseInt(params.get('day')) || null;
 
             // Treat admin=1 as admin mode
             isAdmin = (urlAdmin === '1');
+
+            // If a specific day is supplied (e.g., coming from attendance.html),
+            // remember it so the dashboard can show that day's class.
+            if (urlDay && urlDay > 0) {
+                state.overrideDay = urlDay;
+            }
 
             if (urlRoll) {
                 // Preferred: roll passed via URL (e.g., from attendance success screen)
@@ -1029,14 +1040,46 @@
                 const result = await response.json();
 
                 if (result.success) {
+                    const backendCurrentDay = result.data.currentDay;
+
+                    // If a day override is present (e.g., from ?day=1 in URL),
+                    // clamp it to not exceed the backend-reported current day.
+                    const effectiveDay = state.overrideDay
+                        ? Math.min(state.overrideDay, backendCurrentDay)
+                        : backendCurrentDay;
+
+                    // Recompute stats relative to the effective day so that
+                    // "Today's Class" and the percentages line up with the
+                    // day we are viewing.
+                    const fullCalendar = result.data.calendar || [];
+                    const attendedUpToEffective = fullCalendar
+                        .filter(d => d.day <= effectiveDay && d.attended)
+                        .map(d => d.day);
+
+                    const totalEffective = attendedUpToEffective.length;
+                    const percentEffective = effectiveDay > 0
+                        ? Math.round((totalEffective / effectiveDay) * 100)
+                        : 0;
+
+                    // Streak calculated backwards from the effective day
+                    let streakEffective = 0;
+                    for (let i = effectiveDay; i >= 1; i--) {
+                        const dayInfo = fullCalendar.find(d => d.day === i);
+                        if (dayInfo && dayInfo.attended) {
+                            streakEffective++;
+                        } else {
+                            break;
+                        }
+                    }
+
                     state.attendance = {
-                        total: result.data.totalAttended,
-                        percent: result.data.percent,
-                        streak: result.data.streak,
-                        attendedDays: result.data.calendar.filter(d => d.attended).map(d => d.day),
-                        calendar: result.data.calendar
+                        total: totalEffective,
+                        percent: percentEffective,
+                        streak: streakEffective,
+                        attendedDays: attendedUpToEffective,
+                        calendar: fullCalendar
                     };
-                    state.currentDay = result.data.currentDay;
+                    state.currentDay = effectiveDay;
                     
                     updateDashboard();
                 } else {
