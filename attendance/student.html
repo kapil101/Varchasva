@@ -309,13 +309,6 @@
             gap: 8px;
         }
 
-        .calendar-week-label {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            text-align: center;
-            padding: 8px 0;
-        }
-
         .calendar-day {
             aspect-ratio: 1;
             border-radius: 8px;
@@ -1139,14 +1132,6 @@
         function buildCalendar() {
             const container = document.getElementById('calendarGrid');
             container.innerHTML = '';
-
-            // Add week labels
-            for (let w = 1; w <= 13; w++) {
-                const label = document.createElement('div');
-                label.className = 'calendar-week-label';
-                label.textContent = `W${w}`;
-                container.appendChild(label);
-            }
 
             // Add days (5 days per week × 13 weeks = 65 days)
             for (let day = 1; day <= CONFIG.TOTAL_DAYS; day++) {
