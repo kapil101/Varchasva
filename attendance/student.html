@@ -529,6 +529,18 @@
             color: var(--text-muted);
         }
 
+        .login-error {
+            margin-bottom: 16px;
+            font-size: 0.9rem;
+            color: var(--accent-red);
+            display: none;
+            text-align: left;
+        }
+
+        .login-error.show {
+            display: block;
+        }
+
         /* Footer */
         .footer {
             padding: 24px;
@@ -615,6 +627,7 @@
                     <div class="login-icon">👋</div>
                     <h1 class="login-title">Welcome back!</h1>
                     <p class="login-subtitle">Enter your roll number to access your dashboard</p>
+                    <div id="loginError" class="login-error"></div>
                     
                     <form id="loginForm">
                         <div class="form-group">
@@ -625,7 +638,6 @@
                             <label class="form-label">Password</label>
                             <input type="password" class="form-input" id="passwordInput" placeholder="Enter your password" required>
                         </div>
-                        
                         <div class="remember-group">
                             <input type="checkbox" class="remember-checkbox" id="rememberRoll" checked>
                             <label class="remember-label" for="rememberRoll">Remember me on this device</label>
@@ -672,7 +684,6 @@
                             Today's Class
                         </h2>
                     </div>
-                state.studentToken = null; // Added studentToken to state
                     <div class="today-content">
                         <div class="today-info">
                             <div class="today-day-badge" id="todayBadge">Day 1</div>
@@ -767,17 +778,12 @@
                         <div class="coming-soon-title">Coming Soon</div>
                         <div class="coming-soon-text">Download slides and course materials after each class.</div>
                         <div class="coming-soon-badge">Version 1.1</div>
-                    const password = (document.getElementById('passwordInput')?.value || '').toString(); // Added password input
                     </div>
                 </div>
 
                 <!-- Assignments Card (Coming Soon) -->
                 <div class="card full-width">
                     <div class="card-header">
-                    if (!password) {
-                        alert('Please enter your password');
-                        return;
-                    }
                         <h2 class="card-title">
                             <span class="card-icon">📝</span>
                             Assignments
@@ -851,21 +857,13 @@
                 "PROJECT 2: Text Analyzer (Implementation)",
                 "Pointers and Functions",
                 "Pointers and Strings",
-                    state.studentToken = null; // Clear studentToken on logout
                 "Dynamic Memory Allocation",
-                    localStorage.removeItem('cmastery_student_auth'); // Clear auth on logout
                 "Memory Management & Debugging",
                 "Pointers - Advanced Concepts",
                 "Structures - Basics",
-                    if (!state.rollNumber || !state.studentToken) {
-                        alert('Your session has expired. Please log in again to view your dashboard.');
-                        logout();
-                        return;
-                    }
                 "Array of Structures & Functions",
                 "File I/O - Basics",
                 "File I/O - Advanced",
-                            `${CONFIG.API_URL}?action=getAttendanceCalendar&rollNumber=${state.rollNumber}&studentToken=${encodeURIComponent(state.studentToken)}`
                 "Linked Lists - Concept & Node Creation",
                 "Linked Lists - Operations Part 1",
                 "Linked Lists - Operations Part 2",
@@ -900,6 +898,8 @@
             // the backend-reported currentDay.
             overrideDay: null,
             currentDay: 1,
+            studentToken: null,
+            tokenExpiresAt: null,
             attendance: {
                 total: 0,
                 percent: 0,
@@ -935,27 +935,73 @@
             if (urlDay && urlDay > 0) {
                 state.overrideDay = urlDay;
             }
+            
+            const rollInput = document.getElementById('rollInput');
 
-            if (urlRoll) {
-                // Preferred: roll passed via URL (e.g., from attendance success screen)
-                state.rollNumber = urlRoll;
-                // Also remember it locally for next visit
-                localStorage.setItem('cmastery_roll', urlRoll);
+            // Try to restore an authenticated student session from localStorage
+            let savedAuth = null;
+            try {
+                const raw = localStorage.getItem('cmastery_student_auth');
+                if (raw) {
+                    savedAuth = JSON.parse(raw);
+                }
+            } catch (e) {
+                console.error('Error parsing saved auth:', e);
+                savedAuth = null;
+            }
+
+            const now = Date.now();
+            const hasValidAuth = !!(
+                savedAuth &&
+                savedAuth.roll &&
+                savedAuth.token &&
+                savedAuth.expiresAt &&
+                now < new Date(savedAuth.expiresAt).getTime()
+            );
+
+            if (hasValidAuth) {
+                state.rollNumber = savedAuth.roll.toString().trim().toUpperCase();
+                state.studentToken = savedAuth.token;
+                state.tokenExpiresAt = new Date(savedAuth.expiresAt).getTime();
+
+                if (rollInput) {
+                    rollInput.value = state.rollNumber;
+                }
+
+                // Keep URL in sync with current roll (and admin flag)
+                try {
+                    const url = new URL(window.location.href);
+                    url.searchParams.set('roll', state.rollNumber);
+                    if (isAdmin) {
+                        url.searchParams.set('admin', '1');
+                    } else {
+                        url.searchParams.delete('admin');
+                    }
+                    window.history.replaceState({}, '', url.toString());
+                } catch (e) {
+                    console.error('Error updating URL from saved auth:', e);
+                }
+
+                hideLoginError();
                 showDashboard();
                 loadStudentData();
-            } else {
-                // When there is no roll in the URL (direct access),
-                // keep the login card visible. If a roll is saved
-                // locally, just pre-fill the input instead of
-                // auto-logging in, so the student confirms it.
-                const savedRoll = localStorage.getItem('cmastery_roll');
-                if (savedRoll) {
-                    const rollInput = document.getElementById('rollInput');
-                    if (rollInput) {
-                        rollInput.value = savedRoll;
-                    }
-                }
+                return;
             }
+
+            // No valid authenticated session: keep the login card visible.
+            // Use roll from URL or legacy saved roll just to pre-fill the
+            // input so the student can confirm.
+            state.rollNumber = null;
+            state.studentToken = null;
+            state.tokenExpiresAt = null;
+            localStorage.removeItem('cmastery_student_auth');
+
+            const savedRoll = urlRoll || localStorage.getItem('cmastery_roll');
+            if (savedRoll && rollInput) {
+                rollInput.value = savedRoll;
+            }
+
+            showLogin();
         }
 
         function setupEventListeners() {
@@ -978,42 +1024,112 @@
         function handleLogin(e) {
             e.preventDefault();
             const roll = document.getElementById('rollInput').value.trim().toUpperCase();
+            const password = document.getElementById('passwordInput').value.trim();
             const remember = document.getElementById('rememberRoll').checked;
 
             if (!roll) {
-                alert('Please enter your roll number');
+                showLoginError('Please enter your roll number');
                 return;
             }
 
-            state.rollNumber = roll;
-            
-            if (remember) {
-                localStorage.setItem('cmastery_roll', roll);
+            if (!password) {
+                showLoginError('Please enter your password');
+                return;
             }
-
-            // Keep URL in sync with current roll (and admin flag)
-            try {
-                const url = new URL(window.location.href);
-                url.searchParams.set('roll', roll);
-                if (isAdmin) {
-                    url.searchParams.set('admin', '1');
-                } else {
-                    url.searchParams.delete('admin');
+            (async () => {
+                const btn = document.querySelector('#loginForm .btn-login');
+                if (btn) {
+                    btn.disabled = true;
+                    btn.innerHTML = '<span class="loading"></span> Verifying...';
                 }
-                window.history.replaceState({}, '', url.toString());
-            } catch (e) {
-                console.error('Error updating URL with roll:', e);
-            }
 
-            showDashboard();
-            loadStudentData();
+                hideLoginError();
+
+                try {
+                    const params = new URLSearchParams({
+                        action: 'studentLogin',
+                        rollNumber: roll,
+                        password: password
+                    });
+
+                    const res = await fetch(`${CONFIG.API_URL}?${params.toString()}`);
+                    const result = await res.json();
+
+                    if (!result.success) {
+                        const status = result.data && result.data.status;
+                        if (status === 'StudentNotFound') {
+                            showLoginError(result.message || 'No student record found for this roll number.');
+                        } else if (status === 'NoPassword') {
+                            showLoginError(result.message || 'Password is not set for this account. Please contact your instructor.');
+                        } else if (status === 'InvalidPassword') {
+                            showLoginError(result.message || 'Incorrect password. Please try again.');
+                        } else {
+                            showLoginError(result.message || 'Login failed. Please try again.');
+                        }
+                        document.getElementById('passwordInput').value = '';
+                        return;
+                    }
+
+                    state.rollNumber = (result.data.rollNumber || roll).toString().trim().toUpperCase();
+                    state.studentToken = result.data.token;
+
+                    const ttlMinutes = result.data.expiresInMinutes || (CONFIG.STUDENT && CONFIG.STUDENT.TOKEN_TTL_MINUTES) || (24 * 60);
+                    const expiresAtMs = Date.now() + ttlMinutes * 60 * 1000;
+                    state.tokenExpiresAt = expiresAtMs;
+
+                    const authPayload = {
+                        roll: state.rollNumber,
+                        token: state.studentToken,
+                        expiresAt: new Date(expiresAtMs).toISOString()
+                    };
+                    try {
+                        localStorage.setItem('cmastery_student_auth', JSON.stringify(authPayload));
+                    } catch (err) {
+                        console.error('Error saving auth to localStorage:', err);
+                    }
+
+                    if (remember) {
+                        localStorage.setItem('cmastery_roll', state.rollNumber);
+                    }
+
+                    // Keep URL in sync with current roll (and admin flag)
+                    try {
+                        const url = new URL(window.location.href);
+                        url.searchParams.set('roll', state.rollNumber);
+                        if (isAdmin) {
+                            url.searchParams.set('admin', '1');
+                        } else {
+                            url.searchParams.delete('admin');
+                        }
+                        window.history.replaceState({}, '', url.toString());
+                    } catch (e) {
+                        console.error('Error updating URL with roll:', e);
+                    }
+
+                    document.getElementById('passwordInput').value = '';
+                    hideLoginError();
+                    showDashboard();
+                    loadStudentData();
+                } catch (error) {
+                    console.error('Error during student login:', error);
+                    showLoginError('Could not log you in. Please check your connection or try again later.');
+                } finally {
+                    const btnFinal = document.querySelector('#loginForm .btn-login');
+                    if (btnFinal) {
+                        btnFinal.disabled = false;
+                        btnFinal.innerHTML = '🔓 Access Dashboard';
+                    }
+                }
+            })();
         }
 
         function logout() {
             state.rollNumber = null;
+            state.studentToken = null;
+            state.tokenExpiresAt = null;
             localStorage.removeItem('cmastery_roll');
-            document.getElementById('loginSection').classList.remove('hidden');
-            document.getElementById('dashboardSection').classList.add('hidden');
+            localStorage.removeItem('cmastery_student_auth');
+            showLogin();
             document.getElementById('rollInput').value = '';
 
             // When logging out, clear roll from URL but keep admin flag
@@ -1041,16 +1157,52 @@
             }
         }
 
+        function showLogin() {
+            document.getElementById('loginSection').classList.remove('hidden');
+            document.getElementById('dashboardSection').classList.add('hidden');
+        }
+
+        function showLoginError(message) {
+            const el = document.getElementById('loginError');
+            if (!el) return;
+            el.textContent = message;
+            el.classList.add('show');
+        }
+
+        function hideLoginError() {
+            const el = document.getElementById('loginError');
+            if (!el) return;
+            el.textContent = '';
+            el.classList.remove('show');
+        }
+
         // ═══════════════════════════════════════════════════════════════
         // DATA LOADING
         // ═══════════════════════════════════════════════════════════════
         
         async function loadStudentData() {
+            // Ensure we have a valid authenticated session
+            if (!state.rollNumber || !state.studentToken) {
+                showLogin();
+                showLoginError('Please log in to view your dashboard.');
+                return;
+            }
+
+            if (state.tokenExpiresAt && Date.now() >= state.tokenExpiresAt) {
+                logout();
+                showLoginError('Your session has expired. Please log in again.');
+                return;
+            }
+
             try {
                 // Fetch attendance calendar
-                const response = await fetch(
-                    `${CONFIG.API_URL}?action=getAttendanceCalendar&rollNumber=${state.rollNumber}`
-                );
+                const params = new URLSearchParams({
+                    action: 'getAttendanceCalendar',
+                    rollNumber: state.rollNumber,
+                    studentToken: state.studentToken
+                });
+
+                const response = await fetch(`${CONFIG.API_URL}?${params.toString()}`);
                 const result = await response.json();
 
                 if (result.success) {
@@ -1098,7 +1250,11 @@
                     updateDashboard();
                 } else {
                     // If backend says the student does not exist, force logout
-                    if (result.data?.status === 'StudentNotFound') {
+                    const status = result.data?.status;
+                    if (status === 'Unauthorized') {
+                        logout();
+                        showLoginError('Your session has expired or is invalid. Please log in again.');
+                    } else if (status === 'StudentNotFound') {
                         alert(result.message || 'No student record found for this roll number.');
                         logout();
                     } else {
