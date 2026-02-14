@@ -766,16 +766,16 @@
                         </div>
                     </div>
 
-                    <!-- College/Company (Optional) -->
+                    <!-- College/Company (Required) -->
                     <div class="form-group">
-                        <label class="form-label">College / Company Name (Optional)</label>
-                        <input type="text" class="form-input" id="organization" placeholder="e.g., IIT Delhi or TCS">
+                        <label class="form-label">College / Company Name <span>*</span></label>
+                        <input type="text" class="form-input" id="organization" placeholder="e.g., IIT Delhi or TCS" required>
                     </div>
 
-                    <!-- How did you hear -->
+                    <!-- How did you hear (Required) -->
                     <div class="form-group">
-                        <label class="form-label">How did you hear about us?</label>
-                        <select class="form-input form-select" id="source">
+                        <label class="form-label">How did you hear about us? <span>*</span></label>
+                        <select class="form-input form-select" id="source" required>
                             <option value="">Select...</option>
                             <option value="youtube">YouTube</option>
                             <option value="instagram">Instagram</option>
@@ -1143,8 +1143,10 @@
             const phone = document.getElementById('phone').value.trim();
             const city = document.getElementById('city').value.trim();
             const status = document.getElementById('status').value;
+            const organization = document.getElementById('organization').value.trim();
+            const source = document.getElementById('source').value;
 
-            if (!name || !email || !phone || !city || !status) {
+            if (!name || !email || !phone || !city || !status || !organization || !source) {
                 alert('Please fill all required fields');
                 return;
             }
@@ -1162,9 +1164,10 @@
             const total = priceAfterCoupon;
 
             // Get optional fields
-            const organization = document.getElementById('organization').value.trim();
-            const source = document.getElementById('source').value;
-            const coupon = document.getElementById('coupon').value.trim();
+            // (organization & source are already validated as required above)
+            // Coupon field is currently disabled in the form, so guard against it not existing
+            const couponInput = document.getElementById('coupon');
+            const coupon = couponInput ? couponInput.value.trim() : '';
 
             // Status labels
             const statusLabels = {
